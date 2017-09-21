@@ -17,7 +17,7 @@ public class ImageController {
 
     @PostMapping
     public ResponseEntity uploadImage(@RequestParam("image") MultipartFile image) throws IOException {
-        FileOutputStream outputStream = new FileOutputStream(image.getName());
+        FileOutputStream outputStream = new FileOutputStream(image.getOriginalFilename());
         outputStream.write(image.getBytes());
         return ResponseEntity.ok(null);
     }

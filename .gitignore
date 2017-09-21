@@ -1,6 +1,11 @@
+
+application-local.properties
+uploads/
+
 .DS_Store
 .gradle
 /build/
+/out/
 !gradle/wrapper/gradle-wrapper.jar
 
 ### STS ###
