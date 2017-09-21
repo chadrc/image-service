@@ -6,6 +6,7 @@ class App extends Component {
     onSubmit(event) {
         event.stopPropagation();
         event.preventDefault();
+
         let data = new FormData(event.target);
         console.log(data);
         console.dir(event.target);
@@ -18,10 +19,12 @@ class App extends Component {
             },
             body: data
         }).then((response) => {
-            return response.json();
+            console.log(response);
+            return response.text();
         }).then((data) => {
             console.log(data);
-        })
+        });
+        return false;
     }
 
     render() {
