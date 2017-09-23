@@ -40,6 +40,8 @@ class App extends Component {
                         <button type="submit" className="btn btn-primary">Upload</button>
                     </form>
                     <img src={apiUrl + "/mocha-focus-with-chai.jpg?height=500"} />
+
+                    <img src={apiUrl + "/mocha-focus-with-chai.jpg?width=500"} />
                 </div>
             </div>
         );

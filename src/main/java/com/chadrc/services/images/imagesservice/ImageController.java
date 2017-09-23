@@ -9,6 +9,7 @@ import org.opencv.imgproc.Imgproc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.http.HttpHeaders;
@@ -83,7 +84,25 @@ public class ImageController {
     }
 
     @GetMapping(path = "/{path:.+}", params = {"height"})
-    public ResponseEntity getImage(@PathVariable String path, @RequestParam int height) {
+    public ResponseEntity getImageScaleHeight(@PathVariable String path,
+                                   @RequestParam Integer height) {
+        return getImageScaled(path, height, null);
+    }
+
+    @GetMapping(path = "/{path:.+}", params = {"width"})
+    public ResponseEntity getImageScaleWidth(@PathVariable String path,
+                                   @RequestParam Integer width) {
+        return getImageScaled(path, null, width);
+    }
+
+    private ResponseEntity getImageScaled(@PathVariable String path,
+                                   @RequestParam Integer height,
+                                   @RequestParam Integer width) {
+        log.info("Resize Request: (" + height + ", " + width + ")");
+        if (height == null && width == null) {
+            return getImage(path);
+        }
+
         log.info("Requesting image: " + path);
         String fullFileName = storeRoot + path;
 
@@ -96,10 +115,18 @@ public class ImageController {
         Mat mat = Imgcodecs.imread(fullFileName);
 
         Size size = mat.size();
-        double scale = (double) height / size.height;
-        int newWidth = (int) (scale * size.width);
 
-        Size newSize = new Size(newWidth, height);
+        if (width == null && height != null) {
+            double scale = (double) height / size.height;
+            width = (int) (scale * size.width);
+        }
+
+        if (height == null && width != null) {
+            double scale = (double) width / size.width;
+            height = (int) (scale * size.height);
+        }
+
+        Size newSize = new Size(width, height);
         Mat resized = new Mat(newSize, mat.type());
 
         Imgproc.resize(mat, resized, newSize);
@@ -108,13 +135,12 @@ public class ImageController {
         String ext = path.substring(path.lastIndexOf("."));
         Imgcodecs.imencode(ext, resized, matOfByte, new MatOfInt());
 
-        ByteArrayInputStream inputStream = new ByteArrayInputStream(matOfByte.toArray());
-
+        byte[] bytes = matOfByte.toArray();
         return ResponseEntity.ok()
                 .headers(headers)
-                .contentLength(file.length())
+                .contentLength(bytes.length)
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
-                .body(new InputStreamResource(inputStream));
+                .body(new ByteArrayResource(bytes));
     }
 
     private Map<String, String> makeConflictResponse() {
