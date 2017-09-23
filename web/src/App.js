@@ -39,6 +39,7 @@ class App extends Component {
                         </section>
                         <button type="submit" className="btn btn-primary">Upload</button>
                     </form>
+                    <img src={apiUrl + "/mocha-focus-with-chai.jpg"} />
                 </div>
             </div>
         );

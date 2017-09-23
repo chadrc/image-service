@@ -3,22 +3,21 @@ package com.chadrc.services.images.imagesservice;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import javax.xml.ws.Response;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
-@RestController("image/")
+@RestController()
 public class ImageController {
     private final Logger log = LoggerFactory.getLogger(ImageController.class);
 
@@ -32,7 +31,7 @@ public class ImageController {
         }
     }
 
-    @PostMapping
+    @PostMapping(path = "image/")
     public ResponseEntity uploadImage(@RequestParam("image") MultipartFile image) {
         String fullFileName = storeRoot + image.getOriginalFilename();
         File file = new File(fullFileName);
@@ -51,6 +50,29 @@ public class ImageController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(makeSimpleResponse("Unknown error"));
         }
         return ResponseEntity.ok(null);
+    }
+
+    @GetMapping(path = "/{path:.+}")
+    public ResponseEntity getImage(@PathVariable String path) {
+        log.info("Requesting image: " + path);
+        String fullFileName = storeRoot + path;
+
+        HttpHeaders headers = new HttpHeaders();
+        File file;
+        InputStreamResource resource;
+
+        try {
+            file = new File(fullFileName);
+            resource = new InputStreamResource(new FileInputStream(file));
+        } catch (FileNotFoundException fileNotFoundException) {
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .contentLength(file.length())
+                .contentType(MediaType.parseMediaType("application/octet-stream"))
+                .body(resource);
     }
 
     private Map<String, String> makeConflictResponse() {
