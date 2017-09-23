@@ -11,19 +11,28 @@ buildscript {
 }
 
 apply plugin: 'java'
+apply plugin: 'idea'
 apply plugin: 'eclipse'
+apply plugin: 'application'
 apply plugin: 'org.springframework.boot'
 
 group = 'com.chadrc.services.images'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 sourceCompatibility = 1.8
+
+bootRun {
+	jvmArgs = [
+			"-Djava.library.path=${System.env.JAVA_LIBRARY_PATH}",
+			"-Dspring.profiles.active=${System.env.ACTIVE_PROFILE}"
+	]
+}
 
 repositories {
 	mavenCentral()
 }
 
-
 dependencies {
+	compile fileTree(dir: 'lib', include: '*.jar')
 	compile('org.springframework.boot:spring-boot-starter-web')
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 }
