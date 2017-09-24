@@ -1,5 +1,6 @@
 package com.chadrc.services.images.imagesservice;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfByte;
 import org.opencv.core.MatOfInt;
@@ -22,7 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.PostConstruct;
 import javax.xml.ws.Response;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController()
@@ -39,7 +42,7 @@ public class ImageController {
         }
     }
 
-    @PostMapping(path = "image/")
+    @PostMapping(path = "/image")
     public ResponseEntity uploadImage(@RequestParam("image") MultipartFile image) {
         String fullFileName = storeRoot + image.getOriginalFilename();
         File file = new File(fullFileName);
@@ -48,8 +51,17 @@ public class ImageController {
         }
 
         try {
-            FileOutputStream outputStream = new FileOutputStream(fullFileName);
-            outputStream.write(image.getBytes());
+            List<ImageFocalPoint> focalPoints = new ArrayList<>();
+            focalPoints.add(new ImageFocalPoint(.5f, .5f));
+            ImageMeta meta = new ImageMeta(fullFileName, image.getSize(), focalPoints);
+            ObjectMapper mapper = new ObjectMapper();
+            String metaJson = mapper.writeValueAsString(meta);
+
+            FileOutputStream metaOutputStream = new FileOutputStream(fullFileName + ".meta.json");
+            metaOutputStream.write(metaJson.getBytes());
+
+            FileOutputStream imageOutputStream = new FileOutputStream(fullFileName);
+            imageOutputStream.write(image.getBytes());
         } catch (FileNotFoundException fileNotFoundException) {
             log.error("File not found", fileNotFoundException);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(makeSimpleResponse("Unknown error"));
@@ -60,7 +72,7 @@ public class ImageController {
         return ResponseEntity.ok(null);
     }
 
-    @GetMapping(path = "/{path:.+}")
+    @GetMapping(path = "/i/{path:.+}")
     public ResponseEntity getImage(@PathVariable String path) {
         log.info("Requesting image: " + path);
         String fullFileName = storeRoot + path;
@@ -83,13 +95,13 @@ public class ImageController {
                 .body(resource);
     }
 
-    @GetMapping(path = "/{path:.+}", params = {"height"})
+    @GetMapping(path = "/i/{path:.+}", params = {"height"})
     public ResponseEntity getImageScaleHeight(@PathVariable String path,
                                    @RequestParam Integer height) {
         return getImageScaled(path, height, null);
     }
 
-    @GetMapping(path = "/{path:.+}", params = {"width"})
+    @GetMapping(path = "/i/{path:.+}", params = {"width"})
     public ResponseEntity getImageScaleWidth(@PathVariable String path,
                                    @RequestParam Integer width) {
         return getImageScaled(path, null, width);
