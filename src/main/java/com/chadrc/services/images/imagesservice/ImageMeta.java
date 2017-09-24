@@ -7,6 +7,10 @@ public class ImageMeta {
     private long size;
     private List<ImageFocalPoint> focalPoints;
 
+    public ImageMeta() {
+
+    }
+
     public ImageMeta(String path, long size, List<ImageFocalPoint> focalPoints) {
         this.path = path;
         this.size = size;

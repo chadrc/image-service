@@ -4,6 +4,10 @@ public class ImageFocalPoint {
     private float x;
     private float y;
 
+    public ImageFocalPoint() {
+
+    }
+
     public ImageFocalPoint(float x, float y) {
         this.x = x;
         this.y = y;
@@ -13,7 +17,7 @@ public class ImageFocalPoint {
         return x;
     }
 
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
@@ -21,7 +25,7 @@ public class ImageFocalPoint {
         return y;
     }
 
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 }
