@@ -94,14 +94,16 @@ public class ImageController {
 
     @GetMapping(path = "/i/{path:.+}", params = {"height"})
     public ResponseEntity getImageScaleHeight(@PathVariable String path,
-                                   @RequestParam Integer height) {
-        return getImageScaled(path, height, null);
+                                              @RequestParam Integer height,
+                                              @RequestParam(required = false) Float aspect) {
+        return getImageScaled(path, height, null, aspect);
     }
 
     @GetMapping(path = "/i/{path:.+}", params = {"width"})
     public ResponseEntity getImageScaleWidth(@PathVariable String path,
-                                   @RequestParam Integer width) {
-        return getImageScaled(path, null, width);
+                                             @RequestParam Integer width,
+                                             @RequestParam(required = false) Float aspect) {
+        return getImageScaled(path, null, width, aspect);
     }
 
     @GetMapping(path = "/i/{path:.+}", params = {"focalCrop", "height", "width"})
@@ -160,9 +162,10 @@ public class ImageController {
         }
     }
 
-    private ResponseEntity getImageScaled(@PathVariable String path,
-                                   @RequestParam Integer height,
-                                   @RequestParam Integer width) {
+    private ResponseEntity getImageScaled(String path,
+                                          Integer height,
+                                          Integer width,
+                                          Float aspect) {
         if (height == null && width == null) {
             return getImage(path);
         }
@@ -178,6 +181,21 @@ public class ImageController {
         Mat mat = Imgcodecs.imread(fullFileName);
 
         Size size = mat.size();
+
+        if (aspect != null) {
+            int aspectHeight = (int) size.height;
+            int aspectWidth = (int) size.width;
+            if (width == null) {
+                aspectWidth = (int)((float) aspectHeight * aspect);
+            }
+            if (height == null) {
+                aspectHeight = (int)((float) aspectWidth / aspect);
+            }
+
+            Rect aspectRect = new Rect(0, 0, aspectWidth, aspectHeight);
+            mat = mat.submat(aspectRect);
+            size = mat.size();
+        }
 
         if (width == null && height != null) {
             double scale = (double) height / size.height;

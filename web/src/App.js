@@ -43,7 +43,7 @@ class App extends Component {
 
                     <img src={apiUrl + "/i/mocha-focus-with-chai.jpg?width=500"} />
 
-                    <img src={apiUrl + "/i/chai-focus-with-mocha.jpg?focalCrop=true&height=500&width=500"} />
+                    <img src={apiUrl + "/i/chai-focus-with-mocha.jpg?aspect=1&height=500"} />
                 </div>
             </div>
         );
