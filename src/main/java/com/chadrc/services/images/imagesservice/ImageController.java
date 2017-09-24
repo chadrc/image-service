@@ -178,6 +178,15 @@ public class ImageController {
             return ResponseEntity.notFound().build();
         }
 
+        ImageMeta imageMeta;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            imageMeta = mapper.readValue(new File(fullFileName + ".meta.json"), ImageMeta.class);
+        } catch (IOException ioException) {
+            log.error("Failed to read image meta", ioException);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
         Mat mat = Imgcodecs.imread(fullFileName);
 
         Size size = mat.size();
@@ -192,17 +201,31 @@ public class ImageController {
                 aspectHeight = (int)((float) aspectWidth / aspect);
             }
 
-            Rect aspectRect = new Rect(0, 0, aspectWidth, aspectHeight);
+            if (imageMeta.getFocalPoints().size() == 0) {
+                log.error("No focal point for image: " + fullFileName);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
+
+            ImageFocalPoint focalPoint = imageMeta.getFocalPoints().get(0);
+            int focalX = (int) (size.width * focalPoint.getX());
+            int focalY = (int) (size.height * focalPoint.getY());
+            int halfWidth = aspectWidth/2;
+            int halfHeight = aspectHeight/2;
+
+            int topX = focalX - halfWidth;
+            int topY = focalY - halfHeight;
+
+            Rect aspectRect = new Rect(topX, topY, aspectWidth, aspectHeight);
             mat = mat.submat(aspectRect);
             size = mat.size();
         }
 
-        if (width == null && height != null) {
+        if (width == null) {
             double scale = (double) height / size.height;
             width = (int) (scale * size.width);
         }
 
-        if (height == null && width != null) {
+        if (height == null) {
             double scale = (double) width / size.width;
             height = (int) (scale * size.height);
         }
