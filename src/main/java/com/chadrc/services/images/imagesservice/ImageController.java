@@ -106,62 +106,6 @@ public class ImageController {
         return getImageScaled(path, null, width, aspect);
     }
 
-    @GetMapping(path = "/i/{path:.+}", params = {"focalCrop", "height", "width"})
-    public ResponseEntity getImageFocalCrop(@PathVariable String path,
-                                            @RequestParam Boolean focalCrop, // presence requirement only
-                                            @RequestParam Integer height,
-                                            @RequestParam Integer width) {
-        String fullFileName = storeRoot + path;
-        File file = new File(fullFileName);
-        if (!file.exists()) {
-            return ResponseEntity.notFound().build();
-        }
-
-        Mat image = Imgcodecs.imread(fullFileName);
-        Size imageSize = image.size();
-
-        if (height > imageSize.height) {
-            height = (int) imageSize.height;
-        }
-
-        if (width > imageSize.width) {
-            width = (int) imageSize.width;
-        }
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            ImageMeta imageMeta = mapper.readValue(new File(fullFileName + ".meta.json"), ImageMeta.class);
-
-            if (imageMeta.getFocalPoints().size() == 0) {
-                log.error("No focal point for image: " + fullFileName);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-
-            ImageFocalPoint focalPoint = imageMeta.getFocalPoints().get(0);
-            int focalX = (int) (imageSize.width * focalPoint.getX());
-            int focalY = (int) (imageSize.height * focalPoint.getY());
-            int halfWidth = width/2;
-            int halfHeight = height/2;
-            Rect cropRect = new Rect(focalX - halfWidth, focalY - halfHeight, width, height);
-            Mat crop = image.submat(cropRect);
-
-            MatOfByte matOfByte = new MatOfByte();
-            String ext = path.substring(path.lastIndexOf("."));
-            Imgcodecs.imencode(ext, crop, matOfByte, new MatOfInt());
-
-            HttpHeaders headers = new HttpHeaders();
-            byte[] bytes = matOfByte.toArray();
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .contentLength(bytes.length)
-                    .contentType(MediaType.parseMediaType("application/octet-stream"))
-                    .body(new ByteArrayResource(bytes));
-        } catch (IOException ioException) {
-            log.error("Failed to open image meta file", ioException);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
     private ResponseEntity getImageScaled(String path,
                                           Integer height,
                                           Integer width,
