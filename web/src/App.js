@@ -3,6 +3,19 @@ import React, {Component} from 'react';
 const apiUrl = "http://localhost:8080";
 
 class App extends Component {
+    constructor(props) {
+        super(props);
+        fetch(`${apiUrl}/m/`, {
+            method: 'get',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => response.json())
+        .then((data) => {
+            console.log(data);
+        });
+    }
+
     onSubmit(event) {
         event.stopPropagation();
         event.preventDefault();
@@ -12,7 +25,6 @@ class App extends Component {
         console.dir(event.target);
 
         fetch(`${apiUrl}/image`, {
-            mode: 'no-cors',
             method: 'post',
             headers: {
                 'Accept': 'application/json'
