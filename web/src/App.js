@@ -5,15 +5,27 @@ const apiUrl = "http://localhost:8080";
 class App extends Component {
     constructor(props) {
         super(props);
-        fetch(`${apiUrl}/m/`, {
+        this.state = {
+            imageInfo: {
+                items: []
+            }
+        };
+
+        this.fetchImageData("");
+    }
+
+    fetchImageData(path) {
+        fetch(`${apiUrl}/m/${path}`, {
             method: 'get',
             headers: {
                 'Accept': 'application/json'
             }
         }).then(response => response.json())
-        .then((data) => {
-            console.log(data);
-        });
+            .then((data) => {
+                this.setState({
+                    imageInfo: data
+                });
+            });
     }
 
     onSubmit(event) {
@@ -51,11 +63,36 @@ class App extends Component {
                         </section>
                         <button type="submit" className="btn btn-primary">Upload</button>
                     </form>
-                    <img src={apiUrl + "/i/mocha-focus-with-chai.jpg?height=500"} />
-
-                    <img src={apiUrl + "/i/mocha-focus-with-chai.jpg?width=500"} />
-
-                    <img src={apiUrl + "/i/chai-focus-with-mocha.jpg?aspect=1&height=500"} />
+                    <table className="table">
+                        <thead>
+                            <tr>
+                                <th className="text-center">Image</th>
+                                <th>Path ({this.state.imageInfo.name})</th>
+                                <th className="text-center">Size</th>
+                                <th className="text-center">Focal Points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {this.state.imageInfo.items.map((item) => {
+                            return (
+                                <tr>
+                                    <td>
+                                        <img className="mx-auto d-block" src={`${apiUrl}/i/${item.name}?width=100`} />
+                                    </td>
+                                    <td>{item.name}</td>
+                                    <td className="text-center">{item.size}</td>
+                                    <td className="text-center">
+                                        {item.focalPoints.map((item) => {
+                                            return (
+                                                <span>{`(${item.x}, ${item.y})`}</span>
+                                            )
+                                        })}
+                                    </td>
+                                </tr>
+                            )
+                        })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         );

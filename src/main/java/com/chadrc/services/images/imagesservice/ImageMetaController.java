@@ -71,16 +71,16 @@ public class ImageMetaController {
                 }
                 imageMetaList.addListable(new ImageMetaList(dirName));
             } else if (file.isFile()) {
-                ImageMeta imageMeta;
-                try {
-                    ObjectMapper mapper = new ObjectMapper();
-                    imageMeta = mapper.readValue(file, ImageMeta.class);
-                } catch (IOException ioException) {
-                    log.error("Failed to read image meta: " + file.getAbsolutePath(), ioException);
-                    continue;
-                }
-
                 if (file.getAbsolutePath().endsWith(".meta.json")) {
+                    ImageMeta imageMeta;
+                    try {
+                        ObjectMapper mapper = new ObjectMapper();
+                        imageMeta = mapper.readValue(file, ImageMeta.class);
+                    } catch (IOException ioException) {
+                        log.error("Failed to read image meta: " + file.getAbsolutePath(), ioException);
+                        continue;
+                    }
+
                     imageMeta.setPath(imageMeta.getPath().replace(storeRoot, ""));
                     imageMetaList.addListable(new ImageMetaListItem(imageMeta));
                 }
