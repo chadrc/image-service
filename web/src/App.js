@@ -82,8 +82,7 @@ class App extends Component {
                 <div className="container">
                     <h1>Images Service</h1>
                     {this.state.selectedImage ? (
-                        <ImageEditView id="imageEditModal"
-                                       image={this.state.selectedImage}
+                        <ImageEditView image={this.state.selectedImage}
                                        onSubmit={(event) => this.onEditImageSubmit(event)}
                                        onBackButtonClicked={() => this.onBackButtonClicked()}/>
                     ) : (
