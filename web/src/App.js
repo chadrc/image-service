@@ -3,8 +3,7 @@ import 'bootstrap-v4-dev/dist/css/bootstrap.css';
 import 'bootstrap-v4-dev/dist/js/bootstrap.js';
 import * as $ from 'jquery';
 import Globals from "./Globals";
-import ImageEditModal from "./ImageEditModal";
-import UploadImageModal from "./UploadImageModal";
+import ImageEditView from "./ImageEditView";
 import ImageTable from "./ImageTable";
 
 class App extends Component {
@@ -71,20 +70,27 @@ class App extends Component {
         $('#imageEditModal').modal();
     }
 
+    onBackButtonClicked() {
+        this.setState({
+            selectedImage: null
+        });
+    }
+
     render() {
         return (
             <div className="App">
                 <div className="container">
                     <h1>Images Service</h1>
-                    <button type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#uploadImageModal">
-                        Upload Image
-                    </button>
-                    <UploadImageModal onSubmit={(event) => this.onSubmit(event)}/>
-                    <ImageEditModal id="imageEditModal"
-                                    image={this.state.selectedImage}
-                                    onSubmit={(event) => this.onEditImageSubmit(event)} />
-                    <ImageTable rootDir={this.state.imageInfo}
-                                onItemClicked={(item) => this.onImageClicked(item)}/>
+                    {this.state.selectedImage ? (
+                        <ImageEditView id="imageEditModal"
+                                       image={this.state.selectedImage}
+                                       onSubmit={(event) => this.onEditImageSubmit(event)}
+                                       onBackButtonClicked={() => this.onBackButtonClicked()}/>
+                    ) : (
+                        <ImageTable rootDir={this.state.imageInfo}
+                                    onUploadImageSubmit={(event) => this.onSubmit(event)}
+                                    onItemClicked={(item) => this.onImageClicked(item)}/>
+                    )}
                 </div>
             </div>
         );
