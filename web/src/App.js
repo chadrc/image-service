@@ -1,4 +1,6 @@
 import React, {Component} from 'react';
+import 'bootstrap-v4-dev/dist/css/bootstrap.css';
+import 'bootstrap-v4-dev/dist/js/bootstrap.js';
 
 const apiUrl = "http://localhost:8080";
 
@@ -55,14 +57,34 @@ class App extends Component {
         return (
             <div className="App">
                 <div className="container">
-                    <h4>Images Service</h4>
-                    <form onSubmit={(event) => this.onSubmit(event)}>
-                        <section className="form-group">
-                            <label htmlFor="image">Image</label>
-                            <input id="image" name="image" type="file" className="form-control-file" required={true} />
-                        </section>
-                        <button type="submit" className="btn btn-primary">Upload</button>
-                    </form>
+                    <h1>Images Service</h1>
+                    <button type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#uploadImageModal">
+                        Upload Image
+                    </button>
+                    <div id="uploadImageModal" className="modal fade" tabIndex="-1" role="dialog" aria-labelledby="uploadImageModalLabel" aria-hidden="true">
+                        <div className="modal-dialog" role="document">
+                            <div className="modal-content">
+                                <div className="modal-header">
+                                    <h3 className="modal-title" id="uploadImageModalLabel">Upload Image</h3>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div className="modal-body">
+                                    <form onSubmit={(event) => this.onSubmit(event)}>
+                                        <section className="form-group">
+                                            <label htmlFor="image">Image</label>
+                                            <input id="image" name="image" type="file" className="form-control-file" required={true} />
+                                        </section>
+                                        <button type="submit" className="btn btn-primary">Upload</button>
+                                    </form>
+                                </div>
+                                <div className="modal-footer">
+                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <table className="table">
                         <thead>
                             <tr>
@@ -75,16 +97,16 @@ class App extends Component {
                         <tbody>
                         {this.state.imageInfo.items.map((item) => {
                             return (
-                                <tr>
+                                <tr key={item.name}>
                                     <td>
                                         <img className="mx-auto d-block" src={`${apiUrl}/i/${item.name}?width=100`} />
                                     </td>
                                     <td>{item.name}</td>
                                     <td className="text-center">{item.size}</td>
                                     <td className="text-center">
-                                        {item.focalPoints.map((item) => {
+                                        {item.focalPoints.map((point, index) => {
                                             return (
-                                                <span>{`(${item.x}, ${item.y})`}</span>
+                                                <span key={item.name + "fp" + index}>{`(${point.x}, ${point.y})`}</span>
                                             )
                                         })}
                                     </td>
