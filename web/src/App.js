@@ -79,9 +79,6 @@ class App extends Component {
                                         <button type="submit" className="btn btn-primary">Upload</button>
                                     </form>
                                 </div>
-                                <div className="modal-footer">
-                                    <button type="button" className="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                                </div>
                             </div>
                         </div>
                     </div>
