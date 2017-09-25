@@ -1,7 +1,7 @@
 import React from 'react';
 import Globals from "./Globals";
 
-export default ({rootDir}) => (
+export default ({rootDir, onItemClicked}) => (
     <table className="table">
         <thead>
         <tr>
@@ -14,7 +14,7 @@ export default ({rootDir}) => (
         <tbody>
         {rootDir.items.map((item) => {
             return (
-                <tr key={item.name}>
+                <tr key={item.name} onClick={() => onItemClicked(item)}>
                     <td>
                         <img className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.name}?width=100`} />
                     </td>

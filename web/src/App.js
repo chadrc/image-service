@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import 'bootstrap-v4-dev/dist/css/bootstrap.css';
 import 'bootstrap-v4-dev/dist/js/bootstrap.js';
+import * as $ from 'jquery';
 import Globals from "./Globals";
+import ImageEditModal from "./ImageEditModal";
 import UploadImageModal from "./UploadImageModal";
 import ImageTable from "./ImageTable";
 
@@ -11,7 +13,8 @@ class App extends Component {
         this.state = {
             imageInfo: {
                 items: []
-            }
+            },
+            selectedImage: null
         };
 
         this.fetchImageData("");
@@ -54,6 +57,20 @@ class App extends Component {
         return false;
     }
 
+    onEditImageSubmit(event) {
+        event.stopPropagation();
+        event.preventDefault();
+        return false;
+    }
+
+    onImageClicked(image) {
+        this.setState({
+            selectedImage: image
+        });
+
+        $('#imageEditModal').modal();
+    }
+
     render() {
         return (
             <div className="App">
@@ -63,7 +80,11 @@ class App extends Component {
                         Upload Image
                     </button>
                     <UploadImageModal onSubmit={(event) => this.onSubmit(event)}/>
-                    <ImageTable rootDir={this.state.imageInfo}/>
+                    <ImageEditModal id="imageEditModal"
+                                    image={this.state.selectedImage}
+                                    onSubmit={(event) => this.onEditImageSubmit(event)} />
+                    <ImageTable rootDir={this.state.imageInfo}
+                                onItemClicked={(item) => this.onImageClicked(item)}/>
                 </div>
             </div>
         );
