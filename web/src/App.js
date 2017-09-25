@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import 'bootstrap-v4-dev/dist/css/bootstrap.css';
 import 'bootstrap-v4-dev/dist/js/bootstrap.js';
-
-const apiUrl = "http://localhost:8080";
+import ImageTable from "./ImageTable";
+import Globals from "./Globals";
 
 class App extends Component {
     constructor(props) {
@@ -17,7 +17,7 @@ class App extends Component {
     }
 
     fetchImageData(path) {
-        fetch(`${apiUrl}/m/${path}`, {
+        fetch(`${Globals.ApiUrl}/m/${path}`, {
             method: 'get',
             headers: {
                 'Accept': 'application/json'
@@ -38,7 +38,7 @@ class App extends Component {
         console.log(data);
         console.dir(event.target);
 
-        fetch(`${apiUrl}/image`, {
+        fetch(`${Globals.ApiUrl}/image`, {
             method: 'post',
             headers: {
                 'Accept': 'application/json'
@@ -82,36 +82,7 @@ class App extends Component {
                             </div>
                         </div>
                     </div>
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th className="text-center">Image</th>
-                                <th>Path ({this.state.imageInfo.name})</th>
-                                <th className="text-center">Size</th>
-                                <th className="text-center">Focal Points</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                        {this.state.imageInfo.items.map((item) => {
-                            return (
-                                <tr key={item.name}>
-                                    <td>
-                                        <img className="mx-auto d-block" src={`${apiUrl}/i/${item.name}?width=100`} />
-                                    </td>
-                                    <td>{item.name}</td>
-                                    <td className="text-center">{item.size}</td>
-                                    <td className="text-center">
-                                        {item.focalPoints.map((point, index) => {
-                                            return (
-                                                <span key={item.name + "fp" + index}>{`(${point.x}, ${point.y})`}</span>
-                                            )
-                                        })}
-                                    </td>
-                                </tr>
-                            )
-                        })}
-                        </tbody>
-                    </table>
+                    <ImageTable rootDir={this.state.imageInfo}/>
                 </div>
             </div>
         );
