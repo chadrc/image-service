@@ -1,0 +1,20 @@
+
+.pos-rel {
+    position: relative;
+}
+
+.pos-abs {
+    position: absolute;
+}
+
+.dot {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    background-color: #00FF00;
+    border: 1px solid white;
+}
+
+.dot:hover {
+    box-shadow: 0 0 5px white;
+}

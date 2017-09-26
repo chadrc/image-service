@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import 'bootstrap-v4-dev/dist/css/bootstrap.css';
 import 'bootstrap-v4-dev/dist/js/bootstrap.js';
 import * as $ from 'jquery';
+import './styles.css';
 import Globals from "./Globals";
 import ImageEditView from "./ImageEditView";
 import ImageTable from "./ImageTable";
