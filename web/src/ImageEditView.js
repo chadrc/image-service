@@ -1,6 +1,10 @@
 import React, {Component} from 'react';
 import Globals from './Globals';
 
+const PointRadius = 5;
+const PointLineWidth = 1;
+const PointDiameter = PointRadius * 2;
+
 class ImageEditView extends Component {
     constructor(props) {
         super(props);
@@ -26,12 +30,40 @@ class ImageEditView extends Component {
         });
     }
 
+    onCanvasDown(event) {
+        if (!this.canvas) {
+            return;
+        }
+
+        let canvasBoundingRect = this.canvas.getBoundingClientRect();
+        let downX = event.clientX - canvasBoundingRect.left;
+        let downY = event.clientY - canvasBoundingRect.top;
+        let height = this.canvas.clientHeight;
+        let width = this.canvas.clientWidth;
+        let selectedPoint = null;
+        for (let point of this.props.image.focalPoints) {
+            let pointX = width * point.x;
+            let pointY = height * point.y;
+
+            let difX = Math.abs(pointX - downX);
+            let difY = Math.abs(pointY - downY);
+
+            if (difX <= PointDiameter && difY <= PointDiameter) {
+                selectedPoint = point;
+            }
+        }
+    }
+
+    onCanvasMove(event) {
+
+    }
+
+    onCanvasUp(event) {
+
+    }
+
     render() {
-        let width = this.image ? this.image.width : 0;
-        let height = this.image ? this.image.height : 0;
         let image=this.props.image;
-        let currentWidth=width;
-        let currentHeight=height;
 
         return (
             <div>
@@ -60,20 +92,15 @@ class ImageEditView extends Component {
                                 </form>
                             </div>
                             <div className="col-sm-9">
-                                <div className="pos-rel">
+                                <div className="image-edit-canvas">
                                     <img onLoad={() => this.onImageLoad()}
+                                         alt=""
                                          ref={(img) => this.image = img}
-                                         className="w-100"
                                          src={`${Globals.ImageUrl}/${image.name}`} />
-                                    {image.focalPoints.map((point, index) => {
-                                        return (
-                                            <div key={image.name + "-fp-" + index}
-                                                 className="pos-abs dot" style={{
-                                                top: point.y * currentHeight,
-                                                left: point.x * currentWidth
-                                            }}/>
-                                        )
-                                    })}
+                                    <canvas ref={(can) => this.canvas = can}
+                                            onMouseDown={(event) => this.onCanvasDown(event)}
+                                            onMouseMove={(event) => this.onCanvasMove(event)}
+                                            onMouseUp={(event) => this.onCanvasUp(event)}/>
                                 </div>
                             </div>
                         </div>
@@ -85,7 +112,27 @@ class ImageEditView extends Component {
 
     componentDidUpdate() {
         if (this.canvas) {
-            console.log(this.canvas);
+            let context = this.canvas.getContext('2d');
+            let height = this.canvas.clientHeight;
+            let width = this.canvas.clientWidth;
+            this.canvas.height = height;
+            this.canvas.width = width;
+
+            let pointRadius = PointRadius;
+            let lineWidth = PointLineWidth;
+            context.clearRect(0, 0, width, height);
+            for (let point of this.props.image.focalPoints) {
+                let pointX = width * point.x;
+                let pointY = height * point.y;
+
+                context.beginPath();
+                context.arc(pointX, pointY, pointRadius, 0, 2 * Math.PI, false);
+                context.fillStyle = '#00FF00';
+                context.fill();
+                context.lineWidth = lineWidth;
+                context.strokeStyle = '#FFFFFF';
+                context.stroke();
+            }
         }
     }
 }

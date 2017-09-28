@@ -1,20 +1,18 @@
 
-.pos-rel {
+.image-edit-canvas {
     position: relative;
 }
 
-.pos-abs {
+.image-edit-canvas img {
+    height: 100%;
+    width: 100%;
+}
+
+.image-edit-canvas canvas {
     position: absolute;
-}
-
-.dot {
-    height: 10px;
-    width: 10px;
-    border-radius: 50%;
-    background-color: #00FF00;
-    border: 1px solid white;
-}
-
-.dot:hover {
-    box-shadow: 0 0 5px white;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
 }
