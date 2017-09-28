@@ -59,7 +59,26 @@ class ImageEditView extends Component {
     }
 
     onCanvasMove(event) {
+        if (!this.canvas || !this.state.selectedPoint) {
+            return;
+        }
 
+        let selectedPoint = this.state.selectedPoint;
+        let canvasBoundingRect = this.canvas.getBoundingClientRect();
+        let downX = event.clientX - canvasBoundingRect.left;
+        let downY = event.clientY - canvasBoundingRect.top;
+        let height = this.canvas.clientHeight;
+        let width = this.canvas.clientWidth;
+
+        let newX = downX / width;
+        let newY = downY / height;
+
+        selectedPoint.x = newX;
+        selectedPoint.y = newY;
+
+        this.setState({
+            selectedPoint: selectedPoint
+        });
     }
 
     onCanvasUp(event) {
