@@ -81,6 +81,12 @@ class ImageEditView extends Component {
         });
     }
 
+    onCanvasOut(event) {
+        this.setState({
+            selectedPoint: null
+        });
+    }
+
     onCanvasUp(event) {
         this.setState({
             selectedPoint: null
@@ -125,6 +131,7 @@ class ImageEditView extends Component {
                                     <canvas ref={(can) => this.canvas = can}
                                             onMouseDown={(event) => this.onCanvasDown(event)}
                                             onMouseMove={(event) => this.onCanvasMove(event)}
+                                            onMouseOut={(event) => this.onCanvasOut(event)}
                                             onMouseUp={(event) => this.onCanvasUp(event)}/>
                                 </div>
                             </div>
