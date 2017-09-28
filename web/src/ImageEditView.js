@@ -63,7 +63,9 @@ class ImageEditView extends Component {
     }
 
     onCanvasUp(event) {
-
+        this.setState({
+            selectedPoint: null
+        });
     }
 
     render() {
