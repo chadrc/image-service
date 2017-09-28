@@ -34,6 +34,8 @@ class ImageEditView extends Component {
         if (!this.canvas) {
             return;
         }
+        event.stopPropagation();
+        event.preventDefault();
 
         let canvasBoundingRect = this.canvas.getBoundingClientRect();
         let downX = event.clientX - canvasBoundingRect.left;
@@ -63,6 +65,9 @@ class ImageEditView extends Component {
             return;
         }
 
+        event.stopPropagation();
+        event.preventDefault();
+
         let selectedPoint = this.state.selectedPoint;
         let canvasBoundingRect = this.canvas.getBoundingClientRect();
         let downX = event.clientX - canvasBoundingRect.left;
@@ -82,12 +87,16 @@ class ImageEditView extends Component {
     }
 
     onCanvasOut(event) {
+        event.stopPropagation();
+        event.preventDefault();
         this.setState({
             selectedPoint: null
         });
     }
 
     onCanvasUp(event) {
+        event.stopPropagation();
+        event.preventDefault();
         this.setState({
             selectedPoint: null
         });
