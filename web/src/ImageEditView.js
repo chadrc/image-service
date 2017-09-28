@@ -52,6 +52,10 @@ class ImageEditView extends Component {
                 selectedPoint = point;
             }
         }
+
+        this.setState({
+            selectedPoint: selectedPoint
+        });
     }
 
     onCanvasMove(event) {

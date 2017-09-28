@@ -22,7 +22,7 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit}) => (
                 return (
                     <tr key={item.name} onClick={() => onItemClicked(item)}>
                         <td>
-                            <img className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.name}?width=100`} />
+                            <img alt="" className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.name}?width=100`} />
                         </td>
                         <td>{item.name}</td>
                         <td className="text-center">{item.size}</td>
