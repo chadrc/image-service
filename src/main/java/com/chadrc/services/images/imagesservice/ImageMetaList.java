@@ -7,13 +7,15 @@ import java.util.List;
 public class ImageMetaList implements ImageMetaListable {
     private List<ImageMetaListable> items = new ArrayList<>();
     private String name;
+    private String path;
 
     public ImageMetaList() {
 
     }
 
-    public ImageMetaList(String name) {
+    public ImageMetaList(String name, String path) {
         this.name = name;
+        this.path = path;
     }
 
     @Override
@@ -35,5 +37,14 @@ public class ImageMetaList implements ImageMetaListable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

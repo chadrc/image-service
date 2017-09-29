@@ -4,6 +4,7 @@ import java.util.List;
 
 public class ImageMeta {
     private String path;
+    private String name;
     private long size;
     private List<ImageFocalPoint> focalPoints;
 
@@ -23,6 +24,14 @@ public class ImageMeta {
 
     public void setPath(String path) {
         this.path = path;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public long getSize() {

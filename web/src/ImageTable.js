@@ -3,7 +3,7 @@ import Globals from "./Globals";
 import UploadImageModal from "./UploadImageModal";
 import AddFolderModal from "./AddFolderModal";
 
-export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit}) => (
+export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit, onDirectorySelected}) => (
     <div>
         <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#uploadImageModal">
             Upload Image
@@ -25,11 +25,16 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit}
             <tbody>
             {rootDir.items.map((item) => {
                 return (
-                    <tr key={item.name} onClick={() => onItemClicked(item)}>
+                    <tr key={item.name} onClick={() => {
+                        if (!item.directory) {onItemClicked(item)}
+                    }}>
                         <td>
                             {item.directory ? "" : <img alt="" className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.name}?width=100`} />}
                         </td>
-                        <td>{item.directory ? item.name + "/" : item.name}</td>
+                        <td>{item.directory ?
+                            <span onClick={(event) => onDirectorySelected(item.name)}>{item.name + "/"}</span>
+                            : item.name}
+                        </td>
                         <td className="text-center">{item.directory ? "" : (item.size / 1000000).toFixed(2)}</td>
                         <td className="text-center">
                             {item.focalPoints ? item.focalPoints.map((point, index) => {

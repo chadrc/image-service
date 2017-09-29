@@ -1,6 +1,6 @@
 
 application-local.properties
-uploads/
+/uploads/
 lib/
 
 .DS_Store

@@ -19,6 +19,11 @@ public class ImageMetaListItem implements ImageMetaListable  {
         return meta.getPath();
     }
 
+    @Override
+    public String getPath() {
+        return meta.getPath();
+    }
+
     public Long getSize() {
         return meta.getSize();
     }

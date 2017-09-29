@@ -66,8 +66,10 @@ public class ImageMetaController {
 
             if (file.isDirectory()) {
                 String dirName = file.getName();
-                dirName = dirName.replace(storeRoot, "");
-                imageMetaList.addListable(new ImageMetaList(dirName));
+                String dirPath = file.getPath().replace(dirName, "");
+                ImageMetaList meta = new ImageMetaList(dirName, dirPath);
+
+                imageMetaList.addListable(meta);
             } else if (file.isFile()) {
                 if (file.getAbsolutePath().endsWith(".meta.json")) {
                     ImageMeta imageMeta;
