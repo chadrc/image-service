@@ -16,6 +16,14 @@ export default ({onSubmit}) => (
                             <label htmlFor="image">Image</label>
                             <input id="image" name="image" type="file" className="form-control-file" required={true} />
                         </section>
+                        <section className="form-group">
+                            <label htmlFor="directory">Directory</label>
+                            <input id="directory" name="directory" type="text" className="form-control" />
+                        </section>
+                        <section className="form-group">
+                            <label htmlFor="name">Name</label>
+                            <input id="name" name="name" type="text" className="form-control" />
+                        </section>
                         <button type="submit" className="btn btn-primary">Upload</button>
                     </form>
                 </div>

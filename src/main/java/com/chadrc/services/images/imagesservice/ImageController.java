@@ -14,6 +14,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -40,8 +41,26 @@ public class ImageController {
     }
 
     @PostMapping(path = "/image")
-    public ResponseEntity uploadImage(@RequestParam("image") MultipartFile image) {
-        String fullFileName = storeRoot + image.getOriginalFilename();
+    public ResponseEntity uploadImage(@RequestParam("image") MultipartFile image,
+                                      @RequestParam(value = "name", required = false) String name,
+                                      @RequestParam(value = "directory", required = false) String directory) {
+        String fullFileName = storeRoot;
+        if (!StringUtils.isEmpty(directory)) {
+            if (directory.startsWith("/")) {
+                directory = directory.substring(1);
+            }
+            fullFileName += directory;
+            if (!fullFileName.endsWith("/")) {
+                fullFileName += "/";
+            }
+        }
+
+        if (StringUtils.isEmpty(name)) {
+            fullFileName += image.getOriginalFilename();
+        } else {
+            fullFileName += name;
+        }
+
         File file = new File(fullFileName);
         if (file.exists()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(makeConflictResponse());
