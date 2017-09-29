@@ -61,11 +61,29 @@ public class ImageController {
             imageOutputStream.write(image.getBytes());
         } catch (FileNotFoundException fileNotFoundException) {
             log.error("File not found", fileNotFoundException);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(makeSimpleResponse("Unknown error"));
+            return makeUnknownErrorResponse();
         } catch (IOException ioException) {
             log.error("IO error", ioException);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(makeSimpleResponse("Unknown error"));
+            return makeUnknownErrorResponse();
         }
+        return ResponseEntity.ok(null);
+    }
+
+    @PostMapping(path = "/folder")
+    public ResponseEntity addFolder(@RequestParam("name") String name) {
+        String fullDir = storeRoot + name;
+
+        File file = new File(fullDir);
+        if (file.exists()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(makeConflictResponse());
+        }
+
+        boolean created = file.mkdir();
+
+        if (!created) {
+            return makeUnknownErrorResponse();
+        }
+
         return ResponseEntity.ok(null);
     }
 
@@ -77,5 +95,9 @@ public class ImageController {
         Map<String, String> response = new HashMap<>();
         response.put("message", message);
         return response;
+    }
+
+    private ResponseEntity makeUnknownErrorResponse() {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(makeSimpleResponse("Unknown error"));
     }
 }

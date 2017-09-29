@@ -34,13 +34,11 @@ class App extends Component {
             });
     }
 
-    onSubmit(event) {
+    onUploadImageSubmit(event) {
         event.stopPropagation();
         event.preventDefault();
 
         let data = new FormData(event.target);
-        console.log(data);
-        console.dir(event.target);
 
         fetch(`${Globals.ApiUrl}/image`, {
             method: 'post',
@@ -49,7 +47,26 @@ class App extends Component {
             },
             body: data
         }).then((response) => {
-            console.log(response);
+            return response.text();
+        }).then((data) => {
+
+        });
+        return false;
+    }
+
+    onAddFolderSubmit(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        let data = new FormData(event.target);
+
+        fetch(`${Globals.ApiUrl}/folder`, {
+            method: 'post',
+            headers: {
+                'Accept': 'application/json'
+            },
+            body: data
+        }).then((response) => {
             return response.text();
         }).then((data) => {
             console.log(data);
@@ -88,7 +105,8 @@ class App extends Component {
                                        onBackButtonClicked={() => this.onBackButtonClicked()}/>
                     ) : (
                         <ImageTable rootDir={this.state.imageInfo}
-                                    onUploadImageSubmit={(event) => this.onSubmit(event)}
+                                    onUploadImageSubmit={(event) => this.onUploadImageSubmit(event)}
+                                    onAddFolderSubmit={(event) => this.onAddFolderSubmit(event)}
                                     onItemClicked={(item) => this.onImageClicked(item)}/>
                     )}
                 </div>

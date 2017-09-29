@@ -1,13 +1,18 @@
 import React from 'react';
 import Globals from "./Globals";
 import UploadImageModal from "./UploadImageModal";
+import AddFolderModal from "./AddFolderModal";
 
-export default ({rootDir, onItemClicked, onUploadImageSubmit}) => (
+export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit}) => (
     <div>
-        <button type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#uploadImageModal">
+        <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#uploadImageModal">
             Upload Image
         </button>
-        <UploadImageModal onSubmit={(event) => this.onSubmit(event)}/>
+        <button type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#addFolderModal">
+            Add Folder
+        </button>
+        <AddFolderModal onSubmit={(event) => onAddFolderSubmit(event)}/>
+        <UploadImageModal onSubmit={(event) => onUploadImageSubmit(event)}/>
         <table className="table">
             <thead>
             <tr>
@@ -22,16 +27,16 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit}) => (
                 return (
                     <tr key={item.name} onClick={() => onItemClicked(item)}>
                         <td>
-                            <img alt="" className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.name}?width=100`} />
+                            {item.directory ? "" : <img alt="" className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.name}?width=100`} />}
                         </td>
-                        <td>{item.name}</td>
-                        <td className="text-center">{(item.size / 1000000).toFixed(2)}</td>
+                        <td>{item.directory ? item.name + "/" : item.name}</td>
+                        <td className="text-center">{item.directory ? "" : (item.size / 1000000).toFixed(2)}</td>
                         <td className="text-center">
-                            {item.focalPoints.map((point, index) => {
+                            {item.focalPoints ? item.focalPoints.map((point, index) => {
                                 return (
                                     <span key={item.name + "fp" + index}>{`(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`}</span>
                                 );
-                            })}
+                            }) : ""}
                         </td>
                     </tr>
                 );
