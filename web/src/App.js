@@ -6,6 +6,7 @@ import './styles.css';
 import Globals from "./Globals";
 import ImageEditView from "./ImageEditView";
 import ImageTable from "./ImageTable";
+import {connect} from "react-redux";
 
 class App extends Component {
     constructor(props) {
@@ -129,4 +130,14 @@ class App extends Component {
     }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+    return {
+        ...state
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
