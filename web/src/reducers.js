@@ -32,6 +32,12 @@ const imageApi = (state = {
                     })
                 });
             return newState;
+        case "ADD_DIRECTORY":
+
+            return newState;
+        case "UPLOAD_IMAGE":
+
+            return newState;
         default:
             return state;
     }
