@@ -7,9 +7,9 @@ import registerServiceWorker from './registerServiceWorker';
 window.jQuery = j;
 window.Tether = t;
 
-import("./App").then(App => {
-    let AppComp = App.default;
-    ReactDOM.render(<AppComp />, document.getElementById('root'));
+import("./Main").then(Package => {
+    let Comp = Package.default;
+    ReactDOM.render(<Comp />, document.getElementById('root'));
     registerServiceWorker();
 });
 
