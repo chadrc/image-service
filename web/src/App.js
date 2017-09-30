@@ -7,6 +7,7 @@ import Globals from "./Globals";
 import ImageEditView from "./ImageEditView";
 import ImageTable from "./ImageTable";
 import {connect} from "react-redux";
+import {fetchDirInfoAction} from "./Actions";
 
 class App extends Component {
     constructor(props) {
@@ -14,8 +15,6 @@ class App extends Component {
         this.state = {
             selectedImage: null
         };
-
-        this.props.fetchDirInfo("");
     }
 
     onUploadImageSubmit(event) {
@@ -101,13 +100,6 @@ class App extends Component {
     }
 }
 
-const fetchDirInfoAction = (path) => {
-    return {
-        type: "FETCH_DIRECTORY",
-        path: path
-    };
-};
-
 const mapStateToProps = (state) => {
     return {
         dirInfo: state.imageApi.dirInfo
@@ -116,9 +108,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchDirInfo: (path) => {
-            dispatch(fetchDirInfoAction(path));
-        },
         onTableBackButtonClicked: (dirInfo) => {
             let previousDir = dirInfo.path.replace(`/${dirInfo.name}`, "");
             if (previousDir.startsWith("/")) {

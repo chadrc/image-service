@@ -10,6 +10,11 @@ import App from './App';
 
 import Store from './Store';
 
+import {fetchDirInfoAction} from "./Actions";
+
+// Setup initial state with initial request
+Store.store.dispatch(fetchDirInfoAction(""));
+
 const Main = () => (
     <Provider store={Store.store}>
         <ConnectedRouter history={Store.history}>
