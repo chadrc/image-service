@@ -16,13 +16,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
 @RestController
-@RequestMapping(path = "/i/{path:.+}")
+@RequestMapping(path = "/i/**")
 public class ImageTransformController {
     private final Logger log = LoggerFactory.getLogger(ImageTransformController.class);
 
@@ -37,7 +38,28 @@ public class ImageTransformController {
     }
 
     @GetMapping
-    public ResponseEntity getImage(@PathVariable String path) {
+    public ResponseEntity getImage(HttpServletRequest request) {
+        String path = request.getRequestURI().replace("/i/", "");
+        return getImage(path);
+    }
+
+    @GetMapping(params = {"height"})
+    public ResponseEntity getImageScaleHeight(HttpServletRequest request,
+                                              @RequestParam Integer height,
+                                              @RequestParam(required = false) Float aspect) {
+        String path = request.getRequestURI().replace("/i/", "");
+        return getImageScaled(path, height, null, aspect);
+    }
+
+    @GetMapping(params = {"width"})
+    public ResponseEntity getImageScaleWidth(HttpServletRequest request,
+                                             @RequestParam Integer width,
+                                             @RequestParam(required = false) Float aspect) {
+        String path = request.getRequestURI().replace("/i/", "");
+        return getImageScaled(path, null, width, aspect);
+    }
+
+    private ResponseEntity getImage(String path) {
         log.info("Requesting image: " + path);
         String fullFileName = storeRoot + path;
 
@@ -57,20 +79,6 @@ public class ImageTransformController {
                 .contentLength(file.length())
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(resource);
-    }
-
-    @GetMapping(params = {"height"})
-    public ResponseEntity getImageScaleHeight(@PathVariable String path,
-                                              @RequestParam Integer height,
-                                              @RequestParam(required = false) Float aspect) {
-        return getImageScaled(path, height, null, aspect);
-    }
-
-    @GetMapping(params = {"width"})
-    public ResponseEntity getImageScaleWidth(@PathVariable String path,
-                                             @RequestParam Integer width,
-                                             @RequestParam(required = false) Float aspect) {
-        return getImageScaled(path, null, width, aspect);
     }
 
     private ResponseEntity getImageScaled(String path,
