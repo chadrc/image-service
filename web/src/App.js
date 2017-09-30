@@ -7,7 +7,7 @@ import Globals from "./Globals";
 import ImageEditView from "./ImageEditView";
 import ImageTable from "./ImageTable";
 import {connect} from "react-redux";
-import {fetchDirInfoAction} from "./Actions";
+import {withRouter} from "react-router-dom";
 
 class App extends Component {
     constructor(props) {
@@ -87,10 +87,7 @@ class App extends Component {
                                        onSubmit={(event) => this.onEditImageSubmit(event)}
                                        onBackButtonClicked={() => this.onBackButtonClicked()}/>
                     ) : (
-                        <ImageTable rootDir={this.props.dirInfo}
-                                    onBackButtonClicked={() => this.props.onTableBackButtonClicked(this.props.dirInfo)}
-                                    onDirectorySelected={(directory) => this.props.onDirectorySelected(directory)}
-                                    onUploadImageSubmit={(event) => this.onUploadImageSubmit(event)}
+                        <ImageTable onUploadImageSubmit={(event) => this.onUploadImageSubmit(event)}
                                     onAddFolderSubmit={(event) => this.onAddFolderSubmit(event)}
                                     onItemClicked={(item) => this.onImageClicked(item)}/>
                     )}
@@ -102,23 +99,14 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
     return {
-        dirInfo: state.imageApi.dirInfo
-    }
+
+    };
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onTableBackButtonClicked: (dirInfo) => {
-            let previousDir = dirInfo.path.replace(`/${dirInfo.name}`, "");
-            if (previousDir.startsWith("/")) {
-                previousDir = previousDir.slice(1);
-            }
-            dispatch(fetchDirInfoAction(previousDir));
-        },
-        onDirectorySelected: (dirInfo) => {
-            dispatch(fetchDirInfoAction(dirInfo.path + dirInfo.name));
-        }
+
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));

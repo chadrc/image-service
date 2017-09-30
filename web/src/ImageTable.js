@@ -2,22 +2,35 @@ import React from 'react';
 import Globals from "./Globals";
 import UploadImageModal from "./UploadImageModal";
 import AddFolderModal from "./AddFolderModal";
+import {connect} from "react-redux";
+import {withRouter} from "react-router-dom";
+import {fetchDirInfoAction} from "./Actions";
 
-export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit, onDirectorySelected, onBackButtonClicked}) => (
+const ImageTable = ({
+                        dirInfo,
+                        onItemClicked,
+                        onUploadImageSubmit,
+                        onAddFolderSubmit,
+                        onDirectorySelected,
+                        onBackButtonClicked
+                    }) => (
     <section>
         <section className="d-flex justify-content-between">
             <div>
-                {rootDir.name && rootDir.name !== "/" ?
-                    <button type="button" className="btn btn-secondary mb-2" onClick={() => onBackButtonClicked()}>
+                {dirInfo.name && dirInfo.name !== "/" ?
+                    <button type="button" className="btn btn-secondary mb-2"
+                            onClick={() => onBackButtonClicked(dirInfo)}>
                         Back
                     </button>
                     : ""}
             </div>
             <div>
-                <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#uploadImageModal">
+                <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal"
+                        data-target="#uploadImageModal">
                     Upload Image
                 </button>
-                <button type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#addFolderModal">
+                <button type="button" className="btn btn-primary mb-2" data-toggle="modal"
+                        data-target="#addFolderModal">
                     Add Folder
                 </button>
             </div>
@@ -28,13 +41,13 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit,
             <thead>
             <tr>
                 <th className="text-center">Image</th>
-                <th>Path ({(rootDir.name || "") + "/"})</th>
+                <th>Path ({(dirInfo.name || "") + "/"})</th>
                 <th className="text-center">Size (MB)</th>
                 <th className="text-center">Focal Points</th>
             </tr>
             </thead>
             <tbody>
-            {rootDir.items.map((item) => {
+            {dirInfo.items.map((item) => {
                 return (
                     <tr key={item.name} onClick={() => {
                         if (item.directory) {
@@ -45,14 +58,16 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit,
                     }}>
                         <td>
                             {item.directory ? "" :
-                                <img alt="" className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.path}${item.name}?width=100`} />}
+                                <img alt="" className="mx-auto d-block"
+                                     src={`${Globals.ImageUrl}/${item.path}${item.name}?width=100`}/>}
                         </td>
                         <td>{item.directory ? item.name + "/" : item.name}</td>
                         <td className="text-center">{item.directory ? "" : (item.size / 1000000).toFixed(2)}</td>
                         <td className="text-center">
                             {item.focalPoints ? item.focalPoints.map((point, index) => {
                                 return (
-                                    <span key={item.name + "fp" + index}>{`(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`}</span>
+                                    <span
+                                        key={item.name + "fp" + index}>{`(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`}</span>
                                 );
                             }) : ""}
                         </td>
@@ -63,3 +78,26 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit,
         </table>
     </section>
 );
+
+const mapStateToProps = (state) => {
+    return {
+        dirInfo: state.imageApi.dirInfo
+    }
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onBackButtonClicked: (dirInfo) => {
+            let previousDir = dirInfo.path.replace(`/${dirInfo.name}`, "");
+            if (previousDir.startsWith("/")) {
+                previousDir = previousDir.slice(1);
+            }
+            dispatch(fetchDirInfoAction(previousDir));
+        },
+        onDirectorySelected: (dirInfo) => {
+            dispatch(fetchDirInfoAction(dirInfo.path + dirInfo.name));
+        }
+    };
+};
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ImageTable));
