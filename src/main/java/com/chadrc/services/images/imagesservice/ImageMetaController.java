@@ -36,6 +36,9 @@ public class ImageMetaController {
     @GetMapping(path = "/**")
     public ResponseEntity getDir(HttpServletRequest request) {
         String path = request.getRequestURI().replace("/m/", "");
+        if (path.endsWith("/")) {
+            path = path.substring(0, path.length()-1);
+        }
         ImageMetaList list = makeImageMetaList(Paths.get(storeRoot, path).toString());
         if (list == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
