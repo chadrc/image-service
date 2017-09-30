@@ -12,27 +12,10 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            imageInfo: {
-                items: []
-            },
             selectedImage: null
         };
 
-        this.fetchImageData("");
-    }
-
-    fetchImageData(path) {
-        fetch(`${Globals.ApiUrl}/m/${path}`, {
-            method: 'get',
-            headers: {
-                'Accept': 'application/json'
-            }
-        }).then(response => response.json())
-            .then((data) => {
-                this.setState({
-                    imageInfo: data
-                });
-            });
+        this.props.fetchDirInfo("");
     }
 
     onUploadImageSubmit(event) {
@@ -95,18 +78,6 @@ class App extends Component {
         });
     }
 
-    onTableBackButtonClicked() {
-        let previousDir = this.state.imageInfo.path.replace(`/${this.state.imageInfo.name}`, "");
-        if (previousDir.startsWith("/")) {
-            previousDir = previousDir.slice(1);
-        }
-        this.fetchImageData(previousDir);
-    }
-
-    onDirectorySelected(directory) {
-        this.fetchImageData(directory.path + directory.name);
-    }
-
     render() {
         return (
             <div className="App">
@@ -117,9 +88,9 @@ class App extends Component {
                                        onSubmit={(event) => this.onEditImageSubmit(event)}
                                        onBackButtonClicked={() => this.onBackButtonClicked()}/>
                     ) : (
-                        <ImageTable rootDir={this.state.imageInfo}
-                                    onBackButtonClicked={() => this.onTableBackButtonClicked()}
-                                    onDirectorySelected={(directory) => this.onDirectorySelected(directory)}
+                        <ImageTable rootDir={this.props.dirInfo}
+                                    onBackButtonClicked={() => this.props.onTableBackButtonClicked(this.props.dirInfo)}
+                                    onDirectorySelected={(directory) => this.props.onDirectorySelected(directory)}
                                     onUploadImageSubmit={(event) => this.onUploadImageSubmit(event)}
                                     onAddFolderSubmit={(event) => this.onAddFolderSubmit(event)}
                                     onItemClicked={(item) => this.onImageClicked(item)}/>
@@ -130,14 +101,35 @@ class App extends Component {
     }
 }
 
+const fetchDirInfoAction = (path) => {
+    return {
+        type: "FETCH_DIRECTORY",
+        path: path
+    };
+};
+
 const mapStateToProps = (state) => {
     return {
-        ...state
+        dirInfo: state.imageApi.dirInfo
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+        fetchDirInfo: (path) => {
+            dispatch(fetchDirInfoAction(path));
+        },
+        onTableBackButtonClicked: (dirInfo) => {
+            let previousDir = dirInfo.path.replace(`/${dirInfo.name}`, "");
+            if (previousDir.startsWith("/")) {
+                previousDir = previousDir.slice(1);
+            }
+            dispatch(fetchDirInfoAction(previousDir));
+        },
+        onDirectorySelected: (dirInfo) => {
+            dispatch(fetchDirInfoAction(dirInfo.path + dirInfo.name));
+        }
+    };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);

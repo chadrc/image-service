@@ -28,7 +28,7 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit,
             <thead>
             <tr>
                 <th className="text-center">Image</th>
-                <th>Path ({rootDir.name + "/"})</th>
+                <th>Path ({(rootDir.name || "") + "/"})</th>
                 <th className="text-center">Size (MB)</th>
                 <th className="text-center">Focal Points</th>
             </tr>

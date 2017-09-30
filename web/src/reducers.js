@@ -1,9 +1,37 @@
+import Globals from "./Globals";
 
-const imageApi = (state = {}, action) => {
+import Store from "./Store";
+
+const imageApi = (state = {
+    loadingImages: false,
+    dirInfo: {
+        name: null,
+        path: null,
+        items: []
+    }
+}, action) => {
+    let newState = Object.assign({}, state);
     switch (action.type) {
-        case "RECEIVED":
-            return action.data;
-            break;
+        case "DIRECTORY_RECEIVED":
+            newState.loadingImages = false;
+            newState.dirInfo = action.dirInfo;
+            return newState;
+        case "FETCH_DIRECTORY":
+            let path = action.path;
+            newState.loadingImages = true;
+            fetch(`${Globals.ApiUrl}/m/${path}`, {
+                method: 'get',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).then(response => response.json())
+                .then((data) => {
+                    Store.store.dispatch({
+                        type: "DIRECTORY_RECEIVED",
+                        dirInfo: data
+                    })
+                });
+            return newState;
         default:
             return state;
     }
