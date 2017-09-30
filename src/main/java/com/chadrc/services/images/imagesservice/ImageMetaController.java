@@ -41,7 +41,7 @@ public class ImageMetaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         if (StringUtils.isEmpty(path)) {
-            list.setName("");
+            list.setName("/");
             list.setPath("");
         } else {
             list.setName(path.replace(storeRoot, ""));

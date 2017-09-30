@@ -3,14 +3,23 @@ import Globals from "./Globals";
 import UploadImageModal from "./UploadImageModal";
 import AddFolderModal from "./AddFolderModal";
 
-export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit, onDirectorySelected}) => (
-    <div>
-        <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#uploadImageModal">
-            Upload Image
-        </button>
-        <button type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#addFolderModal">
-            Add Folder
-        </button>
+export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit, onDirectorySelected, onBackButtonClicked}) => (
+    <section>
+        <section className="row">
+            <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#uploadImageModal">
+                Upload Image
+            </button>
+            <button type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#addFolderModal">
+                Add Folder
+            </button>
+        </section>
+        {rootDir.name && rootDir.name !== "/" ?
+            <section className="row">
+                <button type="button" className="btn btn-secondary mb-2" onClick={() => onBackButtonClicked()}>
+                    Back
+                </button>
+            </section>
+        : ""}
         <AddFolderModal onSubmit={(event) => onAddFolderSubmit(event)}/>
         <UploadImageModal onSubmit={(event) => onUploadImageSubmit(event)}/>
         <table className="table">
@@ -50,5 +59,5 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit,
             })}
             </tbody>
         </table>
-    </div>
+    </section>
 );

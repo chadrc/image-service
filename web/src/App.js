@@ -94,6 +94,10 @@ class App extends Component {
         });
     }
 
+    onTableBackButtonClicked() {
+
+    }
+
     onDirectorySelected(directory) {
         this.fetchImageData(directory.path + directory.name);
     }
@@ -109,6 +113,7 @@ class App extends Component {
                                        onBackButtonClicked={() => this.onBackButtonClicked()}/>
                     ) : (
                         <ImageTable rootDir={this.state.imageInfo}
+                                    onBackButtonClicked={() => this.onTableBackButtonClicked()}
                                     onDirectorySelected={(directory) => this.onDirectorySelected(directory)}
                                     onUploadImageSubmit={(event) => this.onUploadImageSubmit(event)}
                                     onAddFolderSubmit={(event) => this.onAddFolderSubmit(event)}
