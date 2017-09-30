@@ -6,20 +6,23 @@ import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
 import {fetchDirInfoAction} from "./Actions";
 
-const ImageTable = ({
-                        dirInfo,
-                        onItemClicked,
-                        onUploadImageSubmit,
-                        onAddFolderSubmit,
-                        onDirectorySelected,
-                        onBackButtonClicked
-                    }) => (
+const ImageTable = (
+    {
+        dirInfo,
+        onItemClicked,
+        onUploadImageSubmit,
+        onAddFolderSubmit,
+        onDirectorySelected,
+        onBackButtonClicked,
+        history,
+        match
+    }) => (
     <section>
         <section className="d-flex justify-content-between">
             <div>
                 {dirInfo.name && dirInfo.name !== "/" ?
                     <button type="button" className="btn btn-secondary mb-2"
-                            onClick={() => onBackButtonClicked(dirInfo)}>
+                            onClick={() => onBackButtonClicked(dirInfo, history, match)}>
                         Back
                     </button>
                     : ""}
@@ -51,7 +54,7 @@ const ImageTable = ({
                 return (
                     <tr key={item.name} onClick={() => {
                         if (item.directory) {
-                            onDirectorySelected(item)
+                            onDirectorySelected(item, history, match)
                         } else {
                             onItemClicked(item)
                         }
@@ -79,6 +82,18 @@ const ImageTable = ({
     </section>
 );
 
+class ImageTableContainer extends React.Component {
+    componentWillReceiveProps(newProps) {
+        if (this.props.location.pathname !== newProps.location.pathname) {
+            this.props.fetchDir(newProps.location.pathname, this.props.match);
+        }
+    }
+
+    render() {
+        return React.createElement(ImageTable, this.props);
+    }
+}
+
 const mapStateToProps = (state) => {
     return {
         dirInfo: state.imageApi.dirInfo
@@ -87,17 +102,23 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onBackButtonClicked: (dirInfo) => {
+        fetchDir: (path, match) => {
+            let apiPath = path.replace(match.path, "");
+            console.log(path);
+            dispatch(fetchDirInfoAction(apiPath));
+        },
+        onBackButtonClicked: (dirInfo, history, match) => {
             let previousDir = dirInfo.path.replace(`/${dirInfo.name}`, "");
             if (previousDir.startsWith("/")) {
                 previousDir = previousDir.slice(1);
             }
-            dispatch(fetchDirInfoAction(previousDir));
+            history.push(match.path + previousDir);
         },
-        onDirectorySelected: (dirInfo) => {
-            dispatch(fetchDirInfoAction(dirInfo.path + dirInfo.name));
+        onDirectorySelected: (dirInfo, history, match) => {
+            let dir = dirInfo.path + dirInfo.name;
+            history.push(match.path + dir);
         }
     };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ImageTable));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ImageTableContainer));

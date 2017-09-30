@@ -8,6 +8,7 @@ import ImageEditView from "./ImageEditView";
 import ImageTable from "./ImageTable";
 import {connect} from "react-redux";
 import {withRouter} from "react-router-dom";
+import {Redirect, Route} from "react-router";
 
 class App extends Component {
     constructor(props) {
@@ -82,7 +83,7 @@ class App extends Component {
             <div className="App">
                 <div className="container">
                     <h1>Images Service</h1>
-                    {this.state.selectedImage ? (
+{/*                    {this.state.selectedImage ? (
                         <ImageEditView image={this.state.selectedImage}
                                        onSubmit={(event) => this.onEditImageSubmit(event)}
                                        onBackButtonClicked={() => this.onBackButtonClicked()}/>
@@ -90,7 +91,11 @@ class App extends Component {
                         <ImageTable onUploadImageSubmit={(event) => this.onUploadImageSubmit(event)}
                                     onAddFolderSubmit={(event) => this.onAddFolderSubmit(event)}
                                     onItemClicked={(item) => this.onImageClicked(item)}/>
-                    )}
+                    )}*/}
+                    <Route path="/" exact={true}>
+                        <Redirect to="/images/" />
+                    </Route>
+                    <Route path="/images/" component={ImageTable} />
                 </div>
             </div>
         );
