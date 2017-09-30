@@ -41,11 +41,16 @@ public class ImageMetaController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         if (StringUtils.isEmpty(path)) {
-            list.setName("/");
+            list.setName("");
             list.setPath("");
         } else {
-            list.setName(path.replace(storeRoot, ""));
-            list.setPath(path.replace(storeRoot, ""));
+            int lastSlash = path.lastIndexOf("/") + 1;
+            String name = path;
+            if (lastSlash > 0 && lastSlash <= path.length()) {
+                name = path.substring(lastSlash);
+            }
+            list.setName(name);
+            list.setPath("/" + path);
         }
         return ResponseEntity.ok(list);
     }
