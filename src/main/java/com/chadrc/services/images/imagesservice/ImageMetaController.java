@@ -50,7 +50,7 @@ public class ImageMetaController {
                 name = path.substring(lastSlash);
             }
             list.setName(name);
-            list.setPath("/" + path);
+            list.setPath("/" + path.replace(name, ""));
         }
         return ResponseEntity.ok(list);
     }

@@ -26,7 +26,7 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit,
             <thead>
             <tr>
                 <th className="text-center">Image</th>
-                <th>Path ({rootDir.name})</th>
+                <th>Path ({rootDir.name + "/"})</th>
                 <th className="text-center">Size (MB)</th>
                 <th className="text-center">Focal Points</th>
             </tr>
@@ -45,7 +45,7 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit,
                             {item.directory ? "" :
                                 <img alt="" className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.path}${item.name}?width=100`} />}
                         </td>
-                        <td>{item.directory ?item.name + "/" : item.name}</td>
+                        <td>{item.directory ? item.name + "/" : item.name}</td>
                         <td className="text-center">{item.directory ? "" : (item.size / 1000000).toFixed(2)}</td>
                         <td className="text-center">
                             {item.focalPoints ? item.focalPoints.map((point, index) => {

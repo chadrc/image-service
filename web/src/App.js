@@ -96,7 +96,6 @@ class App extends Component {
 
     onTableBackButtonClicked() {
         let previousDir = this.state.imageInfo.path.replace(`/${this.state.imageInfo.name}`, "");
-        console.log(previousDir);
         if (previousDir.startsWith("/")) {
             previousDir = previousDir.slice(1);
         }
