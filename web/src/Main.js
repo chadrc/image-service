@@ -20,8 +20,6 @@ const history = createHistory();
 // Build the middleware for intercepting and dispatching navigation actions
 const middleware = routerMiddleware(history);
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 const store = createStore(
     combineReducers({
         ...reducers,
