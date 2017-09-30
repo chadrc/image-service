@@ -26,7 +26,7 @@ const store = createStore(
     applyMiddleware(middleware)
 );
 
-export default () => (
+const Main = () => (
     <Provider store={store}>
         <ConnectedRouter history={history}>
             <div>
@@ -35,3 +35,5 @@ export default () => (
         </ConnectedRouter>
     </Provider>
 );
+
+export default Main;
