@@ -95,7 +95,7 @@ class App extends Component {
     }
 
     onDirectorySelected(directory) {
-        this.fetchImageData(directory);
+        this.fetchImageData(directory.path + directory.name);
     }
 
     render() {

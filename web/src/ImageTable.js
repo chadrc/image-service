@@ -26,15 +26,17 @@ export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit,
             {rootDir.items.map((item) => {
                 return (
                     <tr key={item.name} onClick={() => {
-                        if (!item.directory) {onItemClicked(item)}
+                        if (item.directory) {
+                            onDirectorySelected(item)
+                        } else {
+                            onItemClicked(item)
+                        }
                     }}>
                         <td>
-                            {item.directory ? "" : <img alt="" className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.name}?width=100`} />}
+                            {item.directory ? "" :
+                                <img alt="" className="mx-auto d-block" src={`${Globals.ImageUrl}/${item.path}${item.name}?width=100`} />}
                         </td>
-                        <td>{item.directory ?
-                            <span onClick={(event) => onDirectorySelected(item.name)}>{item.name + "/"}</span>
-                            : item.name}
-                        </td>
+                        <td>{item.directory ?item.name + "/" : item.name}</td>
                         <td className="text-center">{item.directory ? "" : (item.size / 1000000).toFixed(2)}</td>
                         <td className="text-center">
                             {item.focalPoints ? item.focalPoints.map((point, index) => {

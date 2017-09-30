@@ -16,7 +16,7 @@ public class ImageMetaListItem implements ImageMetaListable  {
 
     @Override
     public String getName() {
-        return meta.getPath();
+        return meta.getName();
     }
 
     @Override
