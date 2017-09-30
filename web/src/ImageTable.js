@@ -5,21 +5,23 @@ import AddFolderModal from "./AddFolderModal";
 
 export default ({rootDir, onItemClicked, onUploadImageSubmit, onAddFolderSubmit, onDirectorySelected, onBackButtonClicked}) => (
     <section>
-        <section className="row">
-            <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#uploadImageModal">
-                Upload Image
-            </button>
-            <button type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#addFolderModal">
-                Add Folder
-            </button>
-        </section>
-        {rootDir.name && rootDir.name !== "/" ?
-            <section className="row">
-                <button type="button" className="btn btn-secondary mb-2" onClick={() => onBackButtonClicked()}>
-                    Back
+        <section className="d-flex justify-content-between">
+            <div>
+                {rootDir.name && rootDir.name !== "/" ?
+                    <button type="button" className="btn btn-secondary mb-2" onClick={() => onBackButtonClicked()}>
+                        Back
+                    </button>
+                    : ""}
+            </div>
+            <div>
+                <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal" data-target="#uploadImageModal">
+                    Upload Image
                 </button>
-            </section>
-        : ""}
+                <button type="button" className="btn btn-primary mb-2" data-toggle="modal" data-target="#addFolderModal">
+                    Add Folder
+                </button>
+            </div>
+        </section>
         <AddFolderModal onSubmit={(event) => onAddFolderSubmit(event)}/>
         <UploadImageModal onSubmit={(event) => onUploadImageSubmit(event)}/>
         <table className="table">
