@@ -4,10 +4,9 @@ import 'bootstrap-v4-dev/dist/js/bootstrap.js';
 import * as $ from 'jquery';
 import './styles.css';
 import Globals from "./Globals";
-import ImageEditView from "./ImageEditView";
 import ImageTable from "./ImageTable";
 import {connect} from "react-redux";
-import {withRouter, Redirect, Route} from "react-router-dom";
+import {withRouter, Route} from "react-router-dom";
 import Dashboard from './Dashboard';
 
 class App extends Component {
