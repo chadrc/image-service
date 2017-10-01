@@ -107,9 +107,6 @@ class ImageEditView extends Component {
         let isLoaded = image && image.name !== null && image.path !== null;
         return (
             <div>
-                <button type="button" className="btn btn-info mb-2" onClick={() => this.props.onBackButtonClicked()}>
-                    Back
-                </button>
                 <div className="card">
                     <div className="card-header">
                         <h3 className="card-title">Edit Image</h3>
@@ -117,22 +114,27 @@ class ImageEditView extends Component {
                     {isLoaded? (
                         <div className="card-block">
                             <div className="row">
-                                <div className="col-sm-3">
+                                <div className="col-sm-4">
                                     <form onSubmit={(event) => this.props.onSubmit(event)}>
                                         <section className="form-group">
                                             <label htmlFor="imageName">Name</label>
-                                            <input id="imageName" name="name" className="form-control-file" />
+                                            <input id="imageName"
+                                                   name="name"
+                                                   className="form-control"
+                                                   defaultValue={image.name}/>
                                         </section>
                                         <div className="form-group">
                                             <label>Size</label>
                                             <div>
-                                                <p className="form-control-static">{image.size}</p>
+                                                <p className="form-control-static">
+                                                    {(image.size / 1000000).toFixed(2)} MB
+                                                </p>
                                             </div>
                                         </div>
                                         <button type="button" className="btn btn-primary">Save</button>
                                     </form>
                                 </div>
-                                <div className="col-sm-9">
+                                <div className="col-sm-8">
                                     <div className="image-edit-canvas">
                                         <img onLoad={() => this.onImageLoad()}
                                              alt=""
