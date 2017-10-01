@@ -4,6 +4,7 @@ import Store from "./Store";
 
 const imageService = (state = {
     loadingImages: false,
+    uploadingImage: false,
     dirInfo: {
         name: null,
         path: null,
@@ -49,6 +50,9 @@ const imageService = (state = {
                     type: "IMAGE_UPLOADED",
                     data: data
                 });
+                action.success(data);
+            }).catch((err) => {
+                action.failure(err);
             });
             newState.uploadingImage = true;
             return newState;

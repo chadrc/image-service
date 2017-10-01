@@ -16,20 +16,22 @@ class FormContainer extends React.Component {
         event.preventDefault();
 
         if (this.props.onSubmit) {
-            this.props.onSubmit(this.props.actionType, new FormData(this.form));
-            if (this.clearOnSubmit) {
-                this.form.reset();
-            }
-
-            if (this.props.actionSuccess) {
-                this.props.actionSuccess();
-            }
+            this.props.onSubmit(
+                this.props.actionType,
+                new FormData(this.form),
+                this.props.actionSuccess,
+                this.props.actionFailure
+            );
         }
     }
 
     render() {
+        let props = Object.assign({}, this.props);
+        delete props.actionSuccess;
+        delete props.actionFailure;
+        delete props.actionType;
         return (
-            <form {...this.props}
+            <form {...props}
                   onSubmit={(event) => this.submit(event)}
                   ref={(form) => this.formRef(form)}>
                 {this.props.children}
@@ -40,10 +42,12 @@ class FormContainer extends React.Component {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onSubmit: (type, data) => {
+        onSubmit: (type, data, success, failure) => {
             dispatch({
                 type: type,
-                data: data
+                data: data,
+                success: success,
+                failure: failure
             });
         }
     };

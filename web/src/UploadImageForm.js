@@ -4,7 +4,8 @@ import {withRouter} from 'react-router';
 import FormContainer from "./Forms";
 
 const UploadImageForm = ({
-                             currentDirectory
+                             currentDirectory,
+                             uploadingImage
                          }) => (
     <FormContainer className="form-inline"
                    actionType="UPLOAD_IMAGE"
@@ -12,15 +13,27 @@ const UploadImageForm = ({
                    actionFailure={() => console.log("failure")}>
         <section className="form-group">
             <label htmlFor="image">Image</label>
-            <input id="image" name="image" type="file" className="form-control-file" required={true}/>
+            <input id="image"
+                   className="form-control-file"
+                   name="image"
+                   type="file"
+                   disabled={uploadingImage}
+                   required={true}/>
         </section>
         <section className="form-group">
             <label htmlFor="directory">Directory</label>
-            <input className="form-control" id="directory" name="directory" placeholder={currentDirectory}/>
+            <input id="directory"
+                   className="form-control"
+                   name="directory"
+                   disabled={uploadingImage}
+                   placeholder={currentDirectory}/>
         </section>
         <section className="form-group">
             <label htmlFor="name">Name</label>
-            <input className="form-control" id="name" name="name"/>
+            <input className="form-control"
+                   id="name"
+                   name="name"
+                   disabled={uploadingImage}/>
         </section>
         <button type="submit" className="btn btn-primary">Upload</button>
     </FormContainer>
@@ -28,6 +41,7 @@ const UploadImageForm = ({
 
 const mapStateToProps = (state) => {
     return {
+        uploading: state.imageService.uploadingImage,
         currentDirectory: state.router.location.pathname.replace("/images", "")
     };
 };
