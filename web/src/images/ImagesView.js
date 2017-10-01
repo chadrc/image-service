@@ -6,7 +6,6 @@ import LocationNav from "../LocationNav";
 import ImageEditView from "./ImageEditView";
 import ImagesTable from "./ImagesTable";
 import UploadImageForm from "../UploadImageForm";
-import $ from 'jquery';
 
 const ImagesView = ({
                         dirInfo,
