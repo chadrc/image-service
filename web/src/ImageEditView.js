@@ -114,7 +114,8 @@ class ImageEditView extends Component {
                     <div className="card-header">
                         <h3 className="card-title">Edit Image</h3>
                     </div>
-                    {isLoaded? (<div className="card-block">
+                    {isLoaded? (
+                        <div className="card-block">
                             <div className="row">
                                 <div className="col-sm-3">
                                     <form onSubmit={(event) => this.props.onSubmit(event)}>
