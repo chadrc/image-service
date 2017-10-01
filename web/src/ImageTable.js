@@ -21,7 +21,7 @@ const ImageTable = (
             <div>
                 {dirInfo.name && dirInfo.name !== "/" ?
                     <Link to={`${match.url}${dirInfo.path.replace(dirInfo.name, "")}`}>
-                        {dirInfo.name}
+                        ...{`${match.url}${dirInfo.path.replace(dirInfo.name, "")}`}
                     </Link>
                     : ""}
             </div>
@@ -58,7 +58,7 @@ const ImageTable = (
                         </td>
                         <td>
                                 {item.directory ? (
-                                    <Link to={`${match.url}/${item.path}${item.name}`}>
+                                    <Link to={`${match.path}/${item.path}${item.name}`}>
                                         {item.name}/
                                     </Link>
                                 ) : item.name}
