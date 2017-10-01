@@ -99,6 +99,10 @@ const ImageTable = (
 );
 
 class ImageTableContainer extends React.Component {
+    componentDidMount() {
+        this.props.fetchDir(this.props.location.pathname);
+    }
+
     componentWillReceiveProps(newProps) {
         if (this.props.location.pathname !== newProps.location.pathname) {
             this.props.fetchDir(newProps.location.pathname);
