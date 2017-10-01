@@ -20,9 +20,20 @@ public class ImageMetaListItem implements ImageMetaListable  {
     }
 
     @Override
+    public void setName(String name) {
+        this.meta.setName(name);
+    }
+
+    @Override
     public String getPath() {
         return meta.getPath();
     }
+
+    @Override
+    public void setPath(String path) {
+        this.meta.setPath(path);
+    }
+
 
     public Long getSize() {
         return meta.getSize();

@@ -5,12 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
@@ -34,12 +32,13 @@ public class ImageMetaController {
     }
 
     @GetMapping(path = "/**")
+    @ResponseBody
     public ResponseEntity getDir(HttpServletRequest request) {
         String path = request.getRequestURI().replace("/m/", "");
         if (path.endsWith("/")) {
             path = path.substring(0, path.length()-1);
         }
-        ImageMetaList list = makeImageMetaList(Paths.get(storeRoot, path).toString());
+        ImageMetaListable list = makeImageMetaList(Paths.get(storeRoot, path).toString());
         if (list == null) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -58,10 +57,18 @@ public class ImageMetaController {
         return ResponseEntity.ok(list);
     }
 
-    private ImageMetaList makeImageMetaList(String path) {
-        File dir = new File(path);
-        File[] files = dir.listFiles();
+    private ImageMetaListable makeImageMetaList(String path) {
+        File item = new File(path);
+        File[] files = null;
+        if (item.isDirectory()) {
+            files = item.listFiles();
+        } else if (item.isFile()) {
+            File metaFile = new File(path + ".meta.json");
+            return makeImageMetaListItem(metaFile);
+        }
+
         if (files == null) {
+            log.error("Requested file is neither a file or directory: " + path);
             return null;
         }
 
@@ -81,21 +88,29 @@ public class ImageMetaController {
                 imageMetaList.addListable(meta);
             } else if (file.isFile()) {
                 if (file.getAbsolutePath().endsWith(".meta.json")) {
-                    ImageMeta imageMeta;
-                    try {
-                        ObjectMapper mapper = new ObjectMapper();
-                        imageMeta = mapper.readValue(file, ImageMeta.class);
-                    } catch (IOException ioException) {
-                        log.error("Failed to read image meta: " + file.getAbsolutePath(), ioException);
-                        continue;
+                    ImageMetaListItem listItem = makeImageMetaListItem(file);
+                    if (listItem != null) {
+                        imageMetaList.addListable(listItem);
                     }
-
-                    imageMeta.setPath(imageMeta.getPath().replace(storeRoot, ""));
-                    imageMetaList.addListable(new ImageMetaListItem(imageMeta));
                 }
             }
         }
 
         return imageMetaList;
+    }
+
+    private ImageMetaListItem makeImageMetaListItem(File file) {
+        ImageMeta imageMeta;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+            imageMeta = mapper.readValue(file, ImageMeta.class);
+        } catch (IOException ioException) {
+            log.error("Failed to read image meta: " + file.getAbsolutePath(), ioException);
+            return null;
+        }
+
+        imageMeta.setPath(imageMeta.getPath().replace(storeRoot, ""));
+
+        return new ImageMetaListItem(imageMeta);
     }
 }

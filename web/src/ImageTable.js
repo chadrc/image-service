@@ -6,8 +6,61 @@ import {connect} from "react-redux";
 import {withRouter, Link} from "react-router-dom";
 import {fetchDirInfoAction} from "./Actions";
 import LocationNav from "./LocationNav";
+import ImageEditView from "./ImageEditView";
 
-const ImageTable = (
+const ImagesTable = ({
+    dirInfo,
+    match
+}) => (
+    <table className="table">
+        <thead>
+        <tr>
+            <th className="text-center">Image</th>
+            <th>Path ({(dirInfo.name || "") + "/"})</th>
+            <th className="text-center">Size (MB)</th>
+            <th className="text-center">Focal Points</th>
+        </tr>
+        </thead>
+        <tbody>
+        {dirInfo.items.map((item) => {
+            return (
+                <tr key={item.name}>
+                    <td>
+                        {item.directory ? "" :
+                            <img alt="" className="mx-auto d-block"
+                                 src={`${Globals.ImageUrl}/${item.path}${item.name}?width=100`}/>}
+                    </td>
+                    <td>
+                        {item.directory ? (
+                            <Link to={`${match.path}/${item.path}${item.name}`}>
+                                {item.name}/
+                            </Link>
+                        ) : (
+                            <Link to={`${match.path}/${item.path}${item.name}`}>
+                                {item.name}
+                            </Link>
+                        )}
+                    </td>
+                    <td className="text-center">
+                        {item.directory ? "" : (item.size / 1000000).toFixed(2)}
+                    </td>
+                    <td className="text-center">
+                        {item.directory && item.focalPoints ? item.focalPoints.map((point, index) => {
+                            return (
+                                <span key={item.name + "fp" + index}>
+                                        {`(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`}
+                                    </span>
+                            );
+                        }) : ""}
+                    </td>
+                </tr>
+            );
+        })}
+        </tbody>
+    </table>
+);
+
+const ImagesView = (
     {
         dirInfo,
         onItemClicked,
@@ -34,52 +87,15 @@ const ImageTable = (
         </section>
         <AddFolderModal onSubmit={(event) => onAddFolderSubmit(event)}/>
         <UploadImageModal onSubmit={(event) => onUploadImageSubmit(event)}/>
-        <table className="table">
-            <thead>
-            <tr>
-                <th className="text-center">Image</th>
-                <th>Path ({(dirInfo.name || "") + "/"})</th>
-                <th className="text-center">Size (MB)</th>
-                <th className="text-center">Focal Points</th>
-            </tr>
-            </thead>
-            <tbody>
-            {dirInfo.items.map((item) => {
-                return (
-                    <tr key={item.name}>
-                        <td>
-                            {item.directory ? "" :
-                                <img alt="" className="mx-auto d-block"
-                                     src={`${Globals.ImageUrl}/${item.path}${item.name}?width=100`}/>}
-                        </td>
-                        <td>
-                                {item.directory ? (
-                                    <Link to={`${match.path}/${item.path}${item.name}`}>
-                                        {item.name}/
-                                    </Link>
-                                ) : item.name}
-                        </td>
-                        <td className="text-center">
-                            {item.directory ? "" : (item.size / 1000000).toFixed(2)}
-                            </td>
-                        <td className="text-center">
-                            {item.directory && item.focalPoints ? item.focalPoints.map((point, index) => {
-                                return (
-                                    <span key={item.name + "fp" + index}>
-                                        {`(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`}
-                                    </span>
-                                );
-                            }) : ""}
-                        </td>
-                    </tr>
-                );
-            })}
-            </tbody>
-        </table>
+        {dirInfo.directory ?
+            <ImagesTable dirInfo={dirInfo} match={match}/>
+        :
+            <ImageEditView image={dirInfo}/>
+        }
     </section>
 );
 
-class ImageTableContainer extends React.Component {
+class ImagesViewContainer extends React.Component {
     componentDidMount() {
         this.props.fetchDir(this.props.location.pathname);
     }
@@ -91,7 +107,7 @@ class ImageTableContainer extends React.Component {
     }
 
     render() {
-        return <ImageTable {...this.props}/>
+        return <ImagesView {...this.props}/>
     }
 }
 
@@ -116,4 +132,4 @@ const mapDispatchToProps = (dispatch, {match}) => {
     };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ImageTableContainer));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(ImagesViewContainer));
