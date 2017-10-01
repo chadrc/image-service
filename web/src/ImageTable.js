@@ -3,7 +3,7 @@ import Globals from "./Globals";
 import UploadImageModal from "./UploadImageModal";
 import AddFolderModal from "./AddFolderModal";
 import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
+import {withRouter, Link} from "react-router-dom";
 import {fetchDirInfoAction} from "./Actions";
 
 const ImageTable = (
@@ -13,16 +13,16 @@ const ImageTable = (
         onUploadImageSubmit,
         onAddFolderSubmit,
         onDirectorySelected,
-        onBackButtonClicked
+        onBackButtonClicked,
+        match
     }) => (
     <section>
         <section className="d-flex justify-content-between">
             <div>
                 {dirInfo.name && dirInfo.name !== "/" ?
-                    <button type="button" className="btn btn-secondary mb-2"
-                            onClick={() => onBackButtonClicked(dirInfo)}>
-                        Back
-                    </button>
+                    <Link to={`${match.url}${dirInfo.path.replace(dirInfo.name, "")}`}>
+                        {dirInfo.name}
+                    </Link>
                     : ""}
             </div>
             <div>
@@ -50,20 +50,18 @@ const ImageTable = (
             <tbody>
             {dirInfo.items.map((item) => {
                 return (
-                    <tr key={item.name} onClick={() => {
-                        if (item.directory) {
-                            onDirectorySelected(item)
-                        } else {
-                            onItemClicked(item)
-                        }
-                    }}>
+                    <tr key={item.name}>
                         <td>
                             {item.directory ? "" :
                                 <img alt="" className="mx-auto d-block"
                                      src={`${Globals.ImageUrl}/${item.path}${item.name}?width=100`}/>}
                         </td>
                         <td>
-                            {item.directory ? item.name + "/" : item.name}
+                                {item.directory ? (
+                                    <Link to={`${match.url}/${item.path}${item.name}`}>
+                                        {item.name}/
+                                    </Link>
+                                ) : item.name}
                         </td>
                         <td className="text-center">
                             {item.directory ? "" : (item.size / 1000000).toFixed(2)}
@@ -88,12 +86,12 @@ const ImageTable = (
 class ImageTableContainer extends React.Component {
     componentWillReceiveProps(newProps) {
         if (this.props.location.pathname !== newProps.location.pathname) {
-            this.props.fetchDir(newProps.location.pathname, this.props.match);
+            this.props.fetchDir(newProps.location.pathname);
         }
     }
 
     render() {
-        return React.createElement(ImageTable, this.props);
+        return <ImageTable {...this.props} />
     }
 }
 
@@ -103,26 +101,18 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch, {match, history}) => {
-    let basePath = match.path;
-    if (!basePath.endsWith("/")) {
-        basePath += "/";
-    }
+const mapDispatchToProps = (dispatch, {match}) => {
     return {
         fetchDir: (path) => {
             let apiPath = path.replace(match.path, "");
-            dispatch(fetchDirInfoAction(apiPath));
-        },
-        onBackButtonClicked: (dirInfo) => {
-            let previousDir = dirInfo.path.replace(`/${dirInfo.name}`, "");
-            if (previousDir.startsWith("/")) {
-                previousDir = previousDir.slice(1);
+            if (apiPath.startsWith("/")) {
+                apiPath = apiPath.slice(1);
             }
-            history.push(basePath + previousDir);
-        },
-        onDirectorySelected: (dirInfo) => {
-            let dir = dirInfo.path + dirInfo.name;
-            history.push(basePath + dir);
+            if (apiPath.endsWith("/")) {
+                apiPath = apiPath.slice(0, apiPath.length - 1);
+            }
+            console.log(apiPath);
+            dispatch(fetchDirInfoAction(apiPath));
         }
     };
 };
