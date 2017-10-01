@@ -104,9 +104,14 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch, {match, history}) => {
+    let basePath = match.path;
+    if (!basePath.endsWith("/")) {
+        basePath += "/";
+    }
     return {
         fetchDir: (path) => {
-            let apiPath = path.replace(match.path, "");
+
+            let apiPath = path.replace(basePath, "");
             dispatch(fetchDirInfoAction(apiPath));
         },
         onBackButtonClicked: (dirInfo) => {
@@ -114,11 +119,11 @@ const mapDispatchToProps = (dispatch, {match, history}) => {
             if (previousDir.startsWith("/")) {
                 previousDir = previousDir.slice(1);
             }
-            history.push(match.path + previousDir);
+            history.push(basePath + previousDir);
         },
         onDirectorySelected: (dirInfo) => {
             let dir = dirInfo.path + dirInfo.name;
-            history.push(match.path + dir);
+            history.push(basePath + dir);
         }
     };
 };
