@@ -15,7 +15,6 @@ const ImageTable = (
         onDirectorySelected,
         onBackButtonClicked,
         match,
-        location,
         breadCrumbs
     }) => (
     <section>
@@ -137,7 +136,6 @@ const mapDispatchToProps = (dispatch, {match}) => {
             if (apiPath.endsWith("/")) {
                 apiPath = apiPath.slice(0, apiPath.length - 1);
             }
-            console.log(apiPath);
             dispatch(fetchDirInfoAction(apiPath));
         }
     };
