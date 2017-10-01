@@ -39,7 +39,7 @@ const ImagesTable = ({
                         {item.directory ? "" : (item.size / 1000000).toFixed(2)}
                     </td>
                     <td className="text-center">
-                        {item.directory && item.focalPoints ? item.focalPoints.map((point, index) => {
+                        {!item.directory && item.focalPoints ? item.focalPoints.map((point, index) => {
                             return (
                                 <span key={item.name + "fp" + index}>
                                         {`(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`}

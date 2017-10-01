@@ -33,8 +33,6 @@ const ImagesView = (
                 </button>
             </div>
         </section>
-        <AddFolderModal onSubmit={(event) => onAddFolderSubmit(event)}/>
-        <UploadImageModal onSubmit={(event) => onUploadImageSubmit(event)}/>
         {dirInfo.directory ?
             <ImagesTable dirInfo={dirInfo} basePath={match.path}/>
         :
