@@ -136,7 +136,7 @@ class ImageEditView extends Component {
                                     <img onLoad={() => this.onImageLoad()}
                                          alt=""
                                          ref={(img) => this.image = img}
-                                         src={`${Globals.ImageUrl}/${image.name}`} />
+                                         src={`${Globals.ImageUrl}${image.path}${image.name}`} />
                                     <canvas ref={(can) => this.canvas = can}
                                             onMouseDown={(event) => this.onCanvasDown(event)}
                                             onMouseMove={(event) => this.onCanvasMove(event)}
