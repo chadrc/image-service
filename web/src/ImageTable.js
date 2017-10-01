@@ -101,7 +101,7 @@ class ImageTableContainer extends React.Component {
 
 const mapStateToProps = (state) => {
     return {
-        dirInfo: state.imageApi.dirInfo
+        dirInfo: state.imageService.dirInfo
     }
 };
 

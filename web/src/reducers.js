@@ -2,7 +2,7 @@ import Globals from "./Globals";
 
 import Store from "./Store";
 
-const imageApi = (state = {
+const imageService = (state = {
     loadingImages: false,
     dirInfo: {
         name: null,
@@ -44,5 +44,5 @@ const imageApi = (state = {
 };
 
 export default {
-    imageApi: imageApi
+    imageService: imageService
 }
