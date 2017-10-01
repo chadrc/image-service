@@ -33,7 +33,6 @@ const UploadImageReduxForm = reduxForm({
 })(UploadImageForm);
 
 const mapStateToProps = (state) => {
-    console.log('map state');
     return {
         currentDirectory: state.router.location.pathname,
         initialValues: {
