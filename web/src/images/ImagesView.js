@@ -6,6 +6,7 @@ import LocationNav from "../LocationNav";
 import ImageEditView from "./ImageEditView";
 import ImagesTable from "./ImagesTable";
 import UploadImageForm from "../UploadImageForm";
+import {elary} from "../Utils";
 
 const ImagesView = ({
                         dirInfo,
@@ -39,14 +40,12 @@ const ImagesView = ({
             ) : ""}
         </section>
 
-        {dirInfo.directory ? (
-            <section className="collapse mb-2" id="uploadImageCollapse">
-                <UploadImageForm onSubmit={onUploadImageSubmit}/>
-            </section>
-        ) : ""}
-
-        {dirInfo.directory ?
-            <ImagesTable dirInfo={dirInfo} basePath={match.path}/>
+        {dirInfo.directory ? elary([
+                <section key="uploadImageCollapse" className="collapse mb-2" id="uploadImageCollapse">
+                    <UploadImageForm onSubmit={onUploadImageSubmit}/>
+                </section>,
+                <ImagesTable key="imagesTable" dirInfo={dirInfo} basePath={match.path}/>
+            ])
             :
             <ImageEditView image={dirInfo}/>
         }
