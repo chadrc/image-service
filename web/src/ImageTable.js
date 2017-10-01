@@ -110,7 +110,7 @@ const mapDispatchToProps = (dispatch, {match, history}) => {
     }
     return {
         fetchDir: (path) => {
-            let apiPath = path.replace(basePath, "");
+            let apiPath = path.replace(match.path, "");
             dispatch(fetchDirInfoAction(apiPath));
         },
         onBackButtonClicked: (dirInfo) => {
