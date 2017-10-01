@@ -14,17 +14,33 @@ const ImageTable = (
         onAddFolderSubmit,
         onDirectorySelected,
         onBackButtonClicked,
-        match
+        match,
+        location,
+        breadCrumbs
     }) => (
     <section>
         <section className="d-flex justify-content-between">
-            <div>
-                {dirInfo.name && dirInfo.name !== "/" ?
-                    <Link to={`${match.url}${dirInfo.path.replace(dirInfo.name, "")}`}>
-                        ...{`${match.url}${dirInfo.path.replace(dirInfo.name, "")}`}
-                    </Link>
-                    : ""}
-            </div>
+            <nav className="breadcrumb">
+                {breadCrumbs.map((item, index) => {
+                    let last = index === breadCrumbs.length - 1;
+                    if (last) {
+                        return (
+                            <a key={item.path}
+                               className="breadcrumb-item active">
+                                {item.name}
+                            </a>
+                        );
+                    } else {
+                        return (
+                            <Link className="breadcrumb-item"
+                                  key={item.path}
+                                  to={item.path}>
+                                {item.name}
+                            </Link>
+                        );
+                    }
+                })}
+            </nav>
             <div>
                 <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal"
                         data-target="#uploadImageModal">
@@ -91,7 +107,17 @@ class ImageTableContainer extends React.Component {
     }
 
     render() {
-        return <ImageTable {...this.props} />
+        let breadCrumbs = [];
+        let parts = this.props.location.pathname.split("/").filter((item) => item.length !== 0);
+        let path = "";
+        for (let i=0; i<parts.length; i++) {
+            path += "/" + parts[i];
+            breadCrumbs.push({
+                path: path,
+                name: parts[i]
+            });
+        }
+        return <ImageTable {...this.props} breadCrumbs={breadCrumbs}/>
     }
 }
 
