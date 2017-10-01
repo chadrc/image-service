@@ -6,6 +6,7 @@ import LocationNav from "../LocationNav";
 import ImageEditView from "./ImageEditView";
 import ImagesTable from "./ImagesTable";
 import UploadImageForm from "../UploadImageForm";
+import $ from 'jquery';
 
 const ImagesView = ({
                         dirInfo,
@@ -39,9 +40,11 @@ const ImagesView = ({
             ) : ""}
         </section>
 
-        <section className="collapse mb-2" id="uploadImageCollapse">
-            <UploadImageForm onSubmit={onUploadImageSubmit}/>
-        </section>
+        {dirInfo.directory ? (
+            <section className="collapse mb-2" id="uploadImageCollapse">
+                <UploadImageForm onSubmit={onUploadImageSubmit}/>
+            </section>
+        ) : ""}
 
         {dirInfo.directory ?
             <ImagesTable dirInfo={dirInfo} basePath={match.path}/>
