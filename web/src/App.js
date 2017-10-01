@@ -4,7 +4,7 @@ import 'bootstrap-v4-dev/dist/js/bootstrap.js';
 import * as $ from 'jquery';
 import './styles.css';
 import Globals from "./Globals";
-import ImageTable from "./ImageTable";
+import ImagesView from "./ImagesView";
 import {connect} from "react-redux";
 import {withRouter, Route} from "react-router-dom";
 import Dashboard from './Dashboard';
@@ -83,7 +83,7 @@ class App extends Component {
                 <div className="container">
                     <h1>Images Service</h1>
                     <Route path="/" exact component={Dashboard} />
-                    <Route path="/images" component={ImageTable} />
+                    <Route path="/images" component={ImagesView} />
                 </div>
             </div>
         );
