@@ -37,7 +37,7 @@ const ImagesTable = ({
                             return (
                                 <span key={item.name + "fp" + index}>
                                         {`(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`}
-                                    </span>
+                                </span>
                             );
                         }) : ""}
                     </td>
