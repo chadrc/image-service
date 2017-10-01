@@ -1,42 +1,54 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
-import {Field, reduxForm} from 'redux-form';
 
 const UploadImageForm = ({
     currentDirectory,
     handleSubmit,
-    pristine,
-    submitting
+    formRef
 }) => (
-    <form className="form-inline" onSubmit={handleSubmit}>
+    <form className="form-inline" onSubmit={handleSubmit} ref={(form) => formRef(form)}>
         <section className="form-group">
             <label htmlFor="image">Image</label>
             <input id="image" name="image" type="file" className="form-control-file" required={true}/>
         </section>
         <section className="form-group">
             <label htmlFor="directory">Directory</label>
-            <Field className="form-control"
-                   name="directory"
-                   component="input"
-                   placeholder={currentDirectory}
-                   type="text"/>
+            <input className="form-control" id="directory" name="directory" placeholder={currentDirectory} />
         </section>
         <section className="form-group">
             <label htmlFor="name">Name</label>
-            <Field className="form-control" name="name" component="input" type="text"/>
+            <input className="form-control" id="name" name="name" />
         </section>
-        <button type="submit" disabled={pristine || submitting} className="btn btn-primary">Upload</button>
+        <button type="submit" className="btn btn-primary">Upload</button>
     </form>
 );
 
-const UploadImageReduxForm = reduxForm({
-    form: 'uploadImage'
-})(UploadImageForm);
+class UploadImageFormContainer extends React.Component {
+
+    formRef(form) {
+        this.form = form;
+    }
+
+    submit(event) {
+        event.stopPropagation();
+        event.preventDefault();
+
+        if (this.props.onSubmit) {
+            this.props.onSubmit(new FormData(this.form));
+        }
+    }
+
+    render() {
+        return <UploadImageForm {...this.props}
+                                formRef={(form) => this.formRef(form)}
+                                handleSubmit={(event) => this.submit(event)} />
+    }
+}
 
 const mapStateToProps = (state) => {
     return {
-        currentDirectory: state.router.location.pathname,
+        currentDirectory: state.router.location.pathname.replace("/images", ""),
         initialValues: {
 
         }
@@ -45,8 +57,13 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        onSubmit: (data) => {
+            dispatch({
+                type: "UPLOAD_IMAGE",
+                data: data
+            });
+        }
     };
 };
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UploadImageReduxForm));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(UploadImageFormContainer));

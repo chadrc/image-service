@@ -21,20 +21,6 @@ class App extends Component {
         event.stopPropagation();
         event.preventDefault();
         console.log(arguments);
-        //
-        // let data = new FormData(event.target);
-        //
-        // fetch(`${Globals.ApiUrl}/image`, {
-        //     method: 'post',
-        //     headers: {
-        //         'Accept': 'application/json'
-        //     },
-        //     body: data
-        // }).then((response) => {
-        //     return response.text();
-        // }).then((data) => {
-        //
-        // });
         return false;
     }
 

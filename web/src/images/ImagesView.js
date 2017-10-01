@@ -74,7 +74,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch, {match}) => {
+const mapDispatchToProps = (dispatch, {match, location}) => {
     return {
         fetchDir: (path) => {
             let apiPath = path.replace(match.path, "");
@@ -86,8 +86,14 @@ const mapDispatchToProps = (dispatch, {match}) => {
             }
             dispatch(fetchDirInfoAction(apiPath));
         },
-        uploadImage: () => {
-            dispatch({type: "UPLOAD_IMAGE"});
+        uploadImage: (values) => {
+            if (!values.directory && values !== "") {
+                values.directory = location.pathname;
+            }
+            dispatch({
+                type: "UPLOAD_IMAGE",
+                values: values
+            });
         }
     };
 };
