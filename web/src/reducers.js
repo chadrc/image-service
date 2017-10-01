@@ -36,7 +36,7 @@ const imageService = (state = {
 
             return newState;
         case "UPLOAD_IMAGE":
-
+            let values = state.form.uploadImage.values;
             return newState;
         default:
             return state;

@@ -5,9 +5,11 @@ import {Field, reduxForm} from 'redux-form';
 
 const UploadImageForm = ({
     currentDirectory,
-    handleSubmit
+    handleSubmit,
+    pristine,
+    submitting
 }) => (
-    <form className="form-inline">
+    <form className="form-inline" onSubmit={handleSubmit}>
         <section className="form-group">
             <label htmlFor="image">Image</label>
             <input id="image" name="image" type="file" className="form-control-file" required={true}/>
@@ -24,7 +26,7 @@ const UploadImageForm = ({
             <label htmlFor="name">Name</label>
             <Field className="form-control" name="name" component="input" type="text"/>
         </section>
-        <button type="submit" className="btn btn-primary">Upload</button>
+        <button type="submit" disabled={pristine || submitting} className="btn btn-primary">Upload</button>
     </form>
 );
 
