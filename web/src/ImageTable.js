@@ -64,13 +64,18 @@ const ImageTable = (
                                 <img alt="" className="mx-auto d-block"
                                      src={`${Globals.ImageUrl}/${item.path}${item.name}?width=100`}/>}
                         </td>
-                        <td>{item.directory ? item.name + "/" : item.name}</td>
-                        <td className="text-center">{item.directory ? "" : (item.size / 1000000).toFixed(2)}</td>
+                        <td>
+                            {item.directory ? item.name + "/" : item.name}
+                        </td>
+                        <td className="text-center">
+                            {item.directory ? "" : (item.size / 1000000).toFixed(2)}
+                            </td>
                         <td className="text-center">
                             {item.focalPoints ? item.focalPoints.map((point, index) => {
                                 return (
-                                    <span
-                                        key={item.name + "fp" + index}>{`(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`}</span>
+                                    <span key={item.name + "fp" + index}>
+                                        {`(${point.x.toFixed(2)}, ${point.y.toFixed(2)})`}
+                                    </span>
                                 );
                             }) : ""}
                         </td>
