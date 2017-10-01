@@ -4,7 +4,7 @@ import 'bootstrap-v4-dev/dist/js/bootstrap.js';
 import * as $ from 'jquery';
 import './styles.css';
 import Globals from "./Globals";
-import ImagesView from "./ImagesView";
+import ImagesView from "./images/ImagesView";
 import {connect} from "react-redux";
 import {withRouter, Route} from "react-router-dom";
 import Dashboard from './Dashboard';

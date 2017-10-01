@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import Globals from './Globals';
+import Globals from '../Globals';
 
 const PointRadius = 5;
 const PointLineWidth = 1;
