@@ -104,7 +104,8 @@ class ImageEditView extends Component {
 
     render() {
         let image=this.props.image;
-
+        console.log(image);
+        let isLoaded = image && image.name !== null && image.path !== null;
         return (
             <div>
                 <button type="button" className="btn btn-info mb-2" onClick={() => this.props.onBackButtonClicked()}>
@@ -114,38 +115,39 @@ class ImageEditView extends Component {
                     <div className="card-header">
                         <h3 className="card-title">Edit Image</h3>
                     </div>
-                    <div className="card-block">
-                        <div className="row">
-                            <div className="col-sm-3">
-                                <form onSubmit={(event) => this.props.onSubmit(event)}>
-                                    <section className="form-group">
-                                        <label htmlFor="imageName">Name</label>
-                                        <input id="imageName" name="name" className="form-control-file" />
-                                    </section>
-                                    <div className="form-group">
-                                        <label>Size</label>
-                                        <div>
-                                            <p className="form-control-static">{image.size}</p>
+                    {isLoaded? (<div className="card-block">
+                            <div className="row">
+                                <div className="col-sm-3">
+                                    <form onSubmit={(event) => this.props.onSubmit(event)}>
+                                        <section className="form-group">
+                                            <label htmlFor="imageName">Name</label>
+                                            <input id="imageName" name="name" className="form-control-file" />
+                                        </section>
+                                        <div className="form-group">
+                                            <label>Size</label>
+                                            <div>
+                                                <p className="form-control-static">{image.size}</p>
+                                            </div>
                                         </div>
+                                        <button type="button" className="btn btn-primary">Save</button>
+                                    </form>
+                                </div>
+                                <div className="col-sm-9">
+                                    <div className="image-edit-canvas">
+                                        <img onLoad={() => this.onImageLoad()}
+                                             alt=""
+                                             ref={(img) => this.image = img}
+                                             src={`${Globals.ImageUrl}${image.path}${image.name}`} />
+                                        <canvas ref={(can) => this.canvas = can}
+                                                onMouseDown={(event) => this.onCanvasDown(event)}
+                                                onMouseMove={(event) => this.onCanvasMove(event)}
+                                                onMouseOut={(event) => this.onCanvasOut(event)}
+                                                onMouseUp={(event) => this.onCanvasUp(event)}/>
                                     </div>
-                                    <button type="button" className="btn btn-primary">Save</button>
-                                </form>
-                            </div>
-                            <div className="col-sm-9">
-                                <div className="image-edit-canvas">
-                                    <img onLoad={() => this.onImageLoad()}
-                                         alt=""
-                                         ref={(img) => this.image = img}
-                                         src={`${Globals.ImageUrl}${image.path}${image.name}`} />
-                                    <canvas ref={(can) => this.canvas = can}
-                                            onMouseDown={(event) => this.onCanvasDown(event)}
-                                            onMouseMove={(event) => this.onCanvasMove(event)}
-                                            onMouseOut={(event) => this.onCanvasOut(event)}
-                                            onMouseUp={(event) => this.onCanvasUp(event)}/>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    ) : ""}
                 </div>
             </div>
         );
