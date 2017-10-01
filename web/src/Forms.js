@@ -7,12 +7,23 @@ class FormContainer extends React.Component {
         this.form = form;
     }
 
+    get clearOnSubmit() {
+        return this.props.clearOnSubmit !== false;
+    }
+
     submit(event) {
         event.stopPropagation();
         event.preventDefault();
 
         if (this.props.onSubmit) {
             this.props.onSubmit(this.props.actionType, new FormData(this.form));
+            if (this.clearOnSubmit) {
+                this.form.reset();
+            }
+
+            if (this.props.actionSuccess) {
+                this.props.actionSuccess();
+            }
         }
     }
 

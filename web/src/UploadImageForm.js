@@ -6,7 +6,10 @@ import FormContainer from "./Forms";
 const UploadImageForm = ({
                              currentDirectory
                          }) => (
-    <FormContainer className="form-inline" actionType="UPLOAD_IMAGE">
+    <FormContainer className="form-inline"
+                   actionType="UPLOAD_IMAGE"
+                   actionSuccess={() => console.log("success")}
+                   actionFailure={() => console.log("failure")}>
         <section className="form-group">
             <label htmlFor="image">Image</label>
             <input id="image" name="image" type="file" className="form-control-file" required={true}/>
