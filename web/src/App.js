@@ -7,8 +7,8 @@ import Globals from "./Globals";
 import ImageEditView from "./ImageEditView";
 import ImageTable from "./ImageTable";
 import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
-import {Redirect, Route} from "react-router";
+import {withRouter, Redirect, Route} from "react-router-dom";
+import Dashboard from './Dashboard';
 
 class App extends Component {
     constructor(props) {
@@ -83,10 +83,8 @@ class App extends Component {
             <div className="App">
                 <div className="container">
                     <h1>Images Service</h1>
-                    <Route path="/" exact={true}>
-                        <Redirect to="/images/" />
-                    </Route>
-                    <Route path="/images/" component={ImageTable} />
+                    <Route path="/" exact component={Dashboard} />
+                    <Route path="/images" component={ImageTable} />
                 </div>
             </div>
         );

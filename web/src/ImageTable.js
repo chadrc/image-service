@@ -13,16 +13,14 @@ const ImageTable = (
         onUploadImageSubmit,
         onAddFolderSubmit,
         onDirectorySelected,
-        onBackButtonClicked,
-        history,
-        match
+        onBackButtonClicked
     }) => (
     <section>
         <section className="d-flex justify-content-between">
             <div>
                 {dirInfo.name && dirInfo.name !== "/" ?
                     <button type="button" className="btn btn-secondary mb-2"
-                            onClick={() => onBackButtonClicked(dirInfo, history, match)}>
+                            onClick={() => onBackButtonClicked(dirInfo)}>
                         Back
                     </button>
                     : ""}
@@ -54,7 +52,7 @@ const ImageTable = (
                 return (
                     <tr key={item.name} onClick={() => {
                         if (item.directory) {
-                            onDirectorySelected(item, history, match)
+                            onDirectorySelected(item)
                         } else {
                             onItemClicked(item)
                         }
@@ -105,20 +103,20 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, {match, history}) => {
     return {
-        fetchDir: (path, match) => {
+        fetchDir: (path) => {
             let apiPath = path.replace(match.path, "");
             dispatch(fetchDirInfoAction(apiPath));
         },
-        onBackButtonClicked: (dirInfo, history, match) => {
+        onBackButtonClicked: (dirInfo) => {
             let previousDir = dirInfo.path.replace(`/${dirInfo.name}`, "");
             if (previousDir.startsWith("/")) {
                 previousDir = previousDir.slice(1);
             }
             history.push(match.path + previousDir);
         },
-        onDirectorySelected: (dirInfo, history, match) => {
+        onDirectorySelected: (dirInfo) => {
             let dir = dirInfo.path + dirInfo.name;
             history.push(match.path + dir);
         }
