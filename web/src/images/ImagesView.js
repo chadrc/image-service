@@ -1,8 +1,6 @@
 import React from 'react';
-import UploadImageModal from "../UploadImageModal";
-import AddFolderModal from "../AddFolderModal";
 import {connect} from "react-redux";
-import {withRouter, Link} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import {fetchDirInfoAction} from "../Actions";
 import LocationNav from "../LocationNav";
 import ImageEditView from "./ImageEditView";
