@@ -104,7 +104,6 @@ class ImageEditView extends Component {
 
     render() {
         let image=this.props.image;
-        console.log(image);
         let isLoaded = image && image.name !== null && image.path !== null;
         return (
             <div>
