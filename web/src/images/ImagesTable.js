@@ -25,15 +25,9 @@ const ImagesTable = ({
                                  src={`${Globals.ImageUrl}/${item.path}${item.name}?width=100`}/>}
                     </td>
                     <td>
-                        {item.directory ? (
-                            <Link to={`${basePath}/${item.path}${item.name}`}>
-                                {item.name}/
-                            </Link>
-                        ) : (
-                            <Link to={`${basePath}/${item.path}${item.name}`}>
-                                {item.name}
-                            </Link>
-                        )}
+                        <Link to={`${basePath}/${item.path}${item.name}`}>
+                            {item.name + (item.directory ? "/" : "")}
+                        </Link>
                     </td>
                     <td className="text-center">
                         {item.directory ? "" : (item.size / 1000000).toFixed(2)}
