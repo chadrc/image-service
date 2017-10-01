@@ -5,6 +5,7 @@ import AddFolderModal from "./AddFolderModal";
 import {connect} from "react-redux";
 import {withRouter, Link} from "react-router-dom";
 import {fetchDirInfoAction} from "./Actions";
+import LocationNav from "./LocationNav";
 
 const ImageTable = (
     {
@@ -19,27 +20,7 @@ const ImageTable = (
     }) => (
     <section>
         <section className="d-flex justify-content-between">
-            <nav className="breadcrumb">
-                {breadCrumbs.map((item, index) => {
-                    let last = index === breadCrumbs.length - 1;
-                    if (last) {
-                        return (
-                            <a key={item.path}
-                               className="breadcrumb-item active">
-                                {item.name}
-                            </a>
-                        );
-                    } else {
-                        return (
-                            <Link className="breadcrumb-item"
-                                  key={item.path}
-                                  to={item.path}>
-                                {item.name}
-                            </Link>
-                        );
-                    }
-                })}
-            </nav>
+            <LocationNav/>
             <div>
                 <button type="button" className="btn btn-primary mb-2 mr-2" data-toggle="modal"
                         data-target="#uploadImageModal">
@@ -110,17 +91,7 @@ class ImageTableContainer extends React.Component {
     }
 
     render() {
-        let breadCrumbs = [];
-        let parts = this.props.location.pathname.split("/").filter((item) => item.length !== 0);
-        let path = "";
-        for (let i=0; i<parts.length; i++) {
-            path += "/" + parts[i];
-            breadCrumbs.push({
-                path: path,
-                name: parts[i]
-            });
-        }
-        return <ImageTable {...this.props} breadCrumbs={breadCrumbs}/>
+        return <ImageTable {...this.props}/>
     }
 }
 
