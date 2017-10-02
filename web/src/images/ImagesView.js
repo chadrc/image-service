@@ -90,10 +90,11 @@ const mapDispatchToProps = (dispatch, {match, location}) => {
             if (!values.directory && values !== "") {
                 values.directory = location.pathname;
             }
-            dispatch({
-                type: "UPLOAD_IMAGE",
-                values: values
-            });
+            console.log('values', values);
+            // dispatch({
+            //     type: "UPLOAD_IMAGE",
+            //     values: values
+            // });
         }
     };
 };

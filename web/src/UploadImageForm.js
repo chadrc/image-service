@@ -1,42 +1,50 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
-import FormContainer from "./Forms";
+import {Field, reduxForm} from "redux-form";
+
+const FileInput = ({className, multiple, input}) => (
+    <input className={className}
+           name={input.name}
+           onChange={(event) => {
+               console.dir(event.target);
+               input.onChange(event.target.files)
+           }}
+           onBlur={input.onBlur}
+           onFocus={input.onFocus}
+           multiple={multiple}
+           type="file"/>
+);
 
 const UploadImageForm = ({
                              currentDirectory,
-                             uploadingImage
+                             uploadingImage,
+                             handleSubmit
                          }) => (
-    <FormContainer className="form-inline"
-                   actionType="UPLOAD_IMAGE"
-                   actionSuccess={() => console.log("success")}
-                   actionFailure={() => console.log("failure")}>
+    <form className="form-inline" onSubmit={handleSubmit}>
         <section className="form-group">
             <label htmlFor="image">Image</label>
-            <input id="image"
+            <Field name="image"
+                   multiple
                    className="form-control-file"
-                   name="image"
-                   type="file"
-                   disabled={uploadingImage}
-                   required={true}/>
+                   component={FileInput} />
         </section>
         <section className="form-group">
             <label htmlFor="directory">Directory</label>
-            <input id="directory"
+            <Field name="directory"
                    className="form-control"
-                   name="directory"
-                   disabled={uploadingImage}
-                   defaultValue={currentDirectory}/>
+                   component="input"
+                   type="text" />
         </section>
         <section className="form-group">
             <label htmlFor="name">Name</label>
-            <input className="form-control"
-                   id="name"
-                   name="name"
-                   disabled={uploadingImage}/>
+            <Field name="name"
+                   className="form-control"
+                   component="input"
+                   type="text" />
         </section>
         <button type="submit" className="btn btn-primary">Upload</button>
-    </FormContainer>
+    </form>
 );
 
 const mapStateToProps = (state) => {
@@ -46,4 +54,8 @@ const mapStateToProps = (state) => {
     };
 };
 
-export default withRouter(connect(mapStateToProps, null)(UploadImageForm));
+const UploadImageFormRedux = reduxForm({
+    form: "uploadImage"
+})(UploadImageForm);
+
+export default withRouter(connect(mapStateToProps, null)(UploadImageFormRedux));
