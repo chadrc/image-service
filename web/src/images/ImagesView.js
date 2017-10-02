@@ -88,13 +88,12 @@ const mapDispatchToProps = (dispatch, {match, location}) => {
         },
         uploadImage: (values) => {
             if (!values.directory && values !== "") {
-                values.directory = location.pathname;
+                values.directory = location.pathname.replace("/images", "");
             }
-            console.log('values', values);
-            // dispatch({
-            //     type: "UPLOAD_IMAGE",
-            //     values: values
-            // });
+            dispatch({
+                type: "UPLOAD_IMAGE",
+                values: values
+            });
         }
     };
 };

@@ -37,12 +37,16 @@ const imageService = (state = {
 
             return newState;
         case "UPLOAD_IMAGE":
+            let data = new FormData();
+            data.append("image", action.values.image[0]);
+            data.append("directory", action.values.directory);
+            data.append("name", action.values.name);
             fetch(`${Globals.ApiUrl}/image`, {
                 method: 'post',
                 headers: {
                     'Accept': 'application/json'
                 },
-                body: action.data
+                body: data
             }).then((response) => {
                 return response.text(); // Because of empty response
             }).then((data) => {
@@ -50,9 +54,6 @@ const imageService = (state = {
                     type: "IMAGE_UPLOADED",
                     data: data
                 });
-                action.success(data);
-            }).catch((err) => {
-                action.failure(err);
             });
             newState.uploadingImage = true;
             return newState;
