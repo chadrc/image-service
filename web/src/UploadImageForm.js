@@ -2,19 +2,7 @@ import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
 import {Field, reduxForm} from "redux-form";
-
-const FileInput = ({className, multiple, input}) => (
-    <input className={className}
-           name={input.name}
-           onChange={(event) => {
-               console.dir(event.target);
-               input.onChange(event.target.files)
-           }}
-           onBlur={input.onBlur}
-           onFocus={input.onFocus}
-           multiple={multiple}
-           type="file"/>
-);
+import FileInput from "./FileInput";
 
 const UploadImageForm = ({
                              currentDirectory,
