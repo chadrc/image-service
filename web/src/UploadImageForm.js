@@ -43,8 +43,8 @@ const mapStateToProps = (state) => {
     };
 };
 
-const UploadImageFormRedux = reduxForm({
+const UploadImageFormRedux = withRouter(connect(mapStateToProps, null)(reduxForm({
     form: "uploadImage"
-})(UploadImageForm);
+})(UploadImageForm)));
 
-export default withRouter(connect(mapStateToProps, null)(UploadImageFormRedux));
+export default UploadImageFormRedux;
