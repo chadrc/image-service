@@ -14,7 +14,7 @@ const FileInput = ({className, multiple, input}) => (
            }}
            onBlur={input.onBlur}
            onFocus={input.onFocus}
-           multiple={multiple}
+           multiple={false}
            type="file"/>
 );
 
