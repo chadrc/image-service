@@ -22,6 +22,7 @@ const UploadImageForm = ({
             <Field name="directory"
                    className="form-control"
                    component="input"
+                   placeholder={currentDirectory}
                    type="text" />
         </section>
         <section className="form-group">
