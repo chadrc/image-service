@@ -26,7 +26,7 @@ const UploadImageForm = ({
                    className="form-control"
                    name="directory"
                    disabled={uploadingImage}
-                   placeholder={currentDirectory}/>
+                   defaultValue={currentDirectory}/>
         </section>
         <section className="form-group">
             <label htmlFor="name">Name</label>
