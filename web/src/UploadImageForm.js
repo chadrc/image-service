@@ -39,13 +39,13 @@ const UploadImageForm = ({
 );
 
 const mapStateToProps = (state) => {
-    let images = state.form.uploadImage && state.form.uploadImage.values ?
+    let image = state.form.uploadImage && state.form.uploadImage.values ?
         state.form.uploadImage.values.image : null;
-    let image = images && images.length > 0 ? images[0].name : null;
+    let name = image ? image.name : null;
     return {
         uploading: state.imageService.uploadingImage,
         currentDirectory: state.router.location.pathname.replace("/images", ""),
-        selectedImageName: image
+        selectedImageName: name
     };
 };
 

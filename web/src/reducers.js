@@ -38,7 +38,7 @@ const imageService = (state = {
             return newState;
         case "UPLOAD_IMAGE":
             let data = new FormData();
-            data.append("image", action.values.image[0]);
+            data.append("image", action.values.image);
             data.append("directory", action.values.directory);
             data.append("name", action.values.name);
             fetch(`${Globals.ApiUrl}/image`, {

@@ -4,8 +4,13 @@ const FileInput = ({className, multiple, input}) => (
     <input className={className}
            name={input.name}
            onChange={(event) => {
-               console.dir(event.target);
-               input.onChange(event.target.files)
+               if (event.target.files
+               && event.target.files.length === 1) {
+                   let file = event.target.files[0];
+                   input.onChange(file);
+               } else {
+                   input.onChange(null);
+               }
            }}
            onBlur={input.onBlur}
            onFocus={input.onFocus}
