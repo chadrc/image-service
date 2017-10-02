@@ -49,7 +49,21 @@ const mapStateToProps = (state) => {
     };
 };
 
-const UploadImageFormRedux = withRouter(connect(mapStateToProps, null)(reduxForm({
+const mapDispatchToProps = (dispatch, {location}) => {
+    return {
+        onSubmit: (values) => {
+            if (!values.directory && values !== "") {
+                values.directory = location.pathname.replace("/images", "");
+            }
+            dispatch({
+                type: "UPLOAD_IMAGE",
+                values: values
+            });
+        }
+    };
+};
+
+const UploadImageFormRedux = withRouter(connect(mapStateToProps, mapDispatchToProps)(reduxForm({
     form: "uploadImage"
 })(UploadImageForm)));
 

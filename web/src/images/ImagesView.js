@@ -11,7 +11,6 @@ import {elary} from "../Utils";
 const ImagesView = ({
                         dirInfo,
                         onItemClicked,
-                        uploadImage,
                         onAddFolderSubmit,
                         onDirectorySelected,
                         onBackButtonClicked,
@@ -42,7 +41,7 @@ const ImagesView = ({
 
         {dirInfo.directory ? elary([
                 <section key="uploadImageCollapse" className="collapse mb-2" id="uploadImageCollapse">
-                    <UploadImageForm onSubmit={uploadImage}/>
+                    <UploadImageForm />
                 </section>,
                 <ImagesTable key="imagesTable" dirInfo={dirInfo} basePath={match.path}/>
             ])
@@ -74,7 +73,7 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch, {match, location}) => {
+const mapDispatchToProps = (dispatch, {match}) => {
     return {
         fetchDir: (path) => {
             let apiPath = path.replace(match.path, "");
@@ -85,15 +84,6 @@ const mapDispatchToProps = (dispatch, {match, location}) => {
                 apiPath = apiPath.slice(0, apiPath.length - 1);
             }
             dispatch(fetchDirInfoAction(apiPath));
-        },
-        uploadImage: (values) => {
-            if (!values.directory && values !== "") {
-                values.directory = location.pathname.replace("/images", "");
-            }
-            dispatch({
-                type: "UPLOAD_IMAGE",
-                values: values
-            });
         }
     };
 };
