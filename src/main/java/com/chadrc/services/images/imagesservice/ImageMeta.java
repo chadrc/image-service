@@ -12,9 +12,10 @@ public class ImageMeta {
 
     }
 
-    public ImageMeta(String path, long size, List<ImageFocalPoint> focalPoints) {
+    public ImageMeta(String path, String name, long size, List<ImageFocalPoint> focalPoints) {
         this.path = path;
         this.size = size;
+        this.name = name;
         this.focalPoints = focalPoints;
     }
 

@@ -155,7 +155,11 @@ public class ImageTransformController {
         Imgproc.resize(mat, resized, newSize);
 
         MatOfByte matOfByte = new MatOfByte();
-        String ext = path.substring(path.lastIndexOf("."));
+        int lastDot = path.lastIndexOf(".");
+        String ext = ".jpg";
+        if (lastDot > -1) {
+            ext = path.substring(lastDot);
+        }
         Imgcodecs.imencode(ext, resized, matOfByte, new MatOfInt());
 
         HttpHeaders headers = new HttpHeaders();

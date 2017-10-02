@@ -55,11 +55,12 @@ public class ImageController {
             }
         }
 
-        if (StringUtils.isEmpty(name)) {
-            fullFileName += image.getOriginalFilename();
-        } else {
-            fullFileName += name;
+        String metaName = image.getOriginalFilename();
+        if (!StringUtils.isEmpty(name)) {
+            metaName = name;
         }
+
+        fullFileName += metaName;
 
         File file = new File(fullFileName);
         if (file.exists()) {
@@ -69,7 +70,12 @@ public class ImageController {
         try {
             List<ImageFocalPoint> focalPoints = new ArrayList<>();
             focalPoints.add(new ImageFocalPoint(.5f, .5f));
-            ImageMeta meta = new ImageMeta(fullFileName, image.getSize(), focalPoints);
+            ImageMeta meta = new ImageMeta(
+                    fullFileName.replace(metaName, ""),
+                    metaName,
+                    image.getSize(),
+                    focalPoints
+            );
             ObjectMapper mapper = new ObjectMapper();
             String metaJson = mapper.writeValueAsString(meta);
 
