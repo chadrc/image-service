@@ -14,7 +14,6 @@ const UploadImageForm = ({
         <section className="form-group">
             <label htmlFor="image">Image</label>
             <Field name="image"
-                   multiple
                    className="form-control-file"
                    component={FileInput} />
         </section>
