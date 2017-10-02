@@ -6,6 +6,7 @@ import FileInput from "./FileInput";
 
 const UploadImageForm = ({
                              currentDirectory,
+                             selectedImageName,
                              uploadingImage,
                              handleSubmit
                          }) => (
@@ -30,6 +31,7 @@ const UploadImageForm = ({
             <Field name="name"
                    className="form-control"
                    component="input"
+                   placeholder={selectedImageName}
                    type="text" />
         </section>
         <button type="submit" className="btn btn-primary">Upload</button>
@@ -37,9 +39,13 @@ const UploadImageForm = ({
 );
 
 const mapStateToProps = (state) => {
+    let images = state.form.uploadImage && state.form.uploadImage.values ?
+        state.form.uploadImage.values.image : null;
+    let image = images && images.length > 0 ? images[0].name : null;
     return {
         uploading: state.imageService.uploadingImage,
-        currentDirectory: state.router.location.pathname.replace("/images", "")
+        currentDirectory: state.router.location.pathname.replace("/images", ""),
+        selectedImageName: image
     };
 };
 
