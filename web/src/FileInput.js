@@ -1,13 +1,12 @@
 import React from 'react';
 
 const FileInput = ({className, input, imgRef, value, onChange}) => (
-    <label className={className}>
+    <label className={`file-input${className ? " " + className : ""}`}>
         {value ? (
             <img className="file-input-img" ref={imgRef} />
         ) : (
             <input name={input.name}
                    onChange={(event) => {
-                       console.log('change');
                        onChange(event);
                    }}
                    onBlur={input.onBlur}
@@ -50,16 +49,21 @@ class FileInputContainer extends React.Component {
         );
     }
 
+    componentDidMount() {
+        this.componentDidUpdate();
+    }
+
     componentDidUpdate() {
         if (this.value && this.img) {
             let reader = new FileReader();
             reader.addEventListener("load", () => {
-                console.log("reader loaded");
                 this.img.src = reader.result;
             }, false);
-            console.log(this.value);
             reader.readAsDataURL(this.value)
         }
+
+        console.log(this.props.input.name);
+        console.log(this.value);
     }
 }
 

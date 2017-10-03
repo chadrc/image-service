@@ -16,6 +16,7 @@ const fileMembers = ({
             <section className="form-row mb-2" key={`memberField-${index}`}>
                 <section className="align-items-center justify-content-center d-flex" key="image">
                     <Field name={`${file}.image`}
+                           className="mb-0"
                            component={FileInput} />
                 </section>
                 <section className="col align-items-center d-flex" key="directory">
