@@ -1,12 +1,12 @@
 import React from 'react';
 import {connect} from "react-redux";
-import {withRouter} from "react-router-dom";
+import {withRouter, Link} from "react-router-dom";
 import {fetchDirInfoAction} from "../Actions";
 import LocationNav from "../LocationNav";
 import ImageEditView from "./ImageEditView";
 import ImagesTable from "./ImagesTable";
 import UploadImageForm from "../UploadImageForm";
-import {elary} from "../Utils";
+
 
 const ImagesView = ({
                         dirInfo,
@@ -20,26 +20,24 @@ const ImagesView = ({
                         uploading
                     }) => (
     <section>
-        <section className="d-flex justify-content-between">
+        <section className="d-flex">
             <LocationNav/>
-            {dirInfo.directory ? (
-                <div>
-                    <button type="button"
-                            className="btn btn-primary mb-2"
-                            data-toggle="collapse"
-                            data-target="#addFolderModal">
-                        Add Folder
-                    </button>
-                </div>
+            {location.hash !== "#upload" && dirInfo.directory ? (
+                <nav className="breadcrumb ml-2">
+                    <Link className="breadcrumb-item"
+                          to={location.pathname + "#upload"}>
+                        Upload
+                    </Link>
+                </nav>
             ) : ""}
         </section>
 
         {dirInfo.directory ?
-                (uploading ?
-                    <UploadImageForm />
-                :
+            (uploading ?
+                    <UploadImageForm/>
+                    :
                     <ImagesTable key="imagesTable" dirInfo={dirInfo} basePath={match.path}/>
-                )
+            )
             :
             <ImageEditView image={dirInfo}/>
         }

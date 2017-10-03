@@ -7,7 +7,6 @@ const LocationNav = ({
                          location,
                          hasUploadHash
                      }) => [
-     <section className="d-flex">
          <nav className="breadcrumb">
              {breadCrumbs.map((item, index) => {
                  let last = index === breadCrumbs.length - 1;
@@ -29,15 +28,6 @@ const LocationNav = ({
                  }
              })}
          </nav>
-         {!hasUploadHash ? (
-             <nav className="breadcrumb ml-2">
-                     <Link className="breadcrumb-item"
-                           to={location.pathname + "#upload"}>
-                         Upload
-                     </Link>
-             </nav>
-         ): ""}
-     </section>
 ];
 
 class LocationNavContainer extends React.Component {
