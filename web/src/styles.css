@@ -16,3 +16,8 @@
     width: 100%;
     z-index: 1;
 }
+
+.file-input-img {
+    max-height: 100px;
+    width: 100px;
+}

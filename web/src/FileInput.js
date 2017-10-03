@@ -1,21 +1,66 @@
 import React from 'react';
 
-const FileInput = ({className, multiple, input}) => (
-    <input className={className}
-           name={input.name}
-           onChange={(event) => {
-               if (event.target.files
-               && event.target.files.length === 1) {
-                   let file = event.target.files[0];
-                   input.onChange(file);
-               } else {
-                   input.onChange(null);
-               }
-           }}
-           onBlur={input.onBlur}
-           onFocus={input.onFocus}
-           multiple={false}
-           type="file"/>
+const FileInput = ({className, input, imgRef, value, onChange}) => (
+    <label className={className}>
+        {value ? (
+            <img className="file-input-img" ref={imgRef} />
+        ) : (
+            <input name={input.name}
+                   onChange={(event) => {
+                       console.log('change');
+                       onChange(event);
+                   }}
+                   onBlur={input.onBlur}
+                   onFocus={input.onFocus}
+                   multiple={false}
+                   type="file"/>
+        )}
+    </label>
 );
 
-export default FileInput;
+class FileInputContainer extends React.Component {
+    imgRef(img) {
+        this.img = img;
+    }
+
+    onChange(event) {
+        let file = null;
+        if (event.target.files
+            && event.target.files.length === 1) {
+            file = event.target.files[0];
+        }
+        this.props.input.onChange(file);
+    }
+
+    get value() {
+        let value = null;
+        if (this.props.input.value
+            && this.props.input.value.name) {
+            value = this.props.input.value;
+        }
+        return value
+    }
+
+    render() {
+        return (
+            <FileInput {...this.props}
+                       value={this.value}
+                       onChange={(event) => this.onChange(event)}
+                       imgRef={(img) => this.imgRef(img)}/>
+        );
+    }
+
+    componentDidUpdate() {
+        if (this.value && this.img) {
+            let reader = new FileReader();
+            reader.addEventListener("load", () => {
+                console.log("reader loaded");
+                this.img.src = reader.result;
+            }, false);
+            console.log(this.value);
+            reader.readAsDataURL(this.value)
+        }
+    }
+}
+
+export default FileInputContainer;

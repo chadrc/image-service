@@ -12,37 +12,41 @@ const fileMembers = ({
 }) => {
     let fieldComps = fields.map((file, index) => {
         let fileData = fields.get(index);
-        return <section className="form-row mb-2" key={`memberField-${index}`}>
-            <section className="col" key="image">
-                <Field name={`${file}.image`}
-                       component={FileInput} />
+        return (
+            <section className="form-row mb-2" key={`memberField-${index}`}>
+                <section className="align-items-center justify-content-center d-flex" key="image">
+                    <Field name={`${file}.image`}
+                           component={FileInput} />
+                </section>
+                <section className="col align-items-center d-flex" key="directory">
+                    <Field name={`${file}.directory`}
+                           className="form-control"
+                           component="input"
+                           placeholder={currentDirectory}
+                           type="text" />
+                </section>
+                <section className="col align-items-center d-flex" key="name">
+                    <Field name={`${file}.name`}
+                           className="form-control"
+                           component="input"
+                           placeholder={fileData.image ? fileData.image.name : null}
+                           type="text" />
+                </section>
+                {fields.length > 1 ?
+                    <section className="align-items-center justify-content-center d-flex">
+                        <button type="button"
+                                className="btn btn-outline-danger"
+                                onClick={() => {
+                                    if (fields.length > 1) {
+                                        fields.remove(index);
+                                    }
+                                }}>
+                            &times;
+                        </button>
+                    </section>
+                : ""}
             </section>
-            <section className="col" key="directory">
-                <Field name={`${file}.directory`}
-                       className="form-control"
-                       component="input"
-                       placeholder={currentDirectory}
-                       type="text" />
-            </section>
-            <section className="col" key="name">
-                <Field name={`${file}.name`}
-                       className="form-control"
-                       component="input"
-                       placeholder={fileData.image ? fileData.image.name : null}
-                       type="text" />
-            </section>
-            {fields.length > 1 ?
-                <button type="button"
-                        className="btn btn-outline-danger"
-                        onClick={() => {
-                            if (fields.length > 1) {
-                                fields.remove(index);
-                            }
-                        }}>
-                    &times;
-                </button>
-            : ""}
-        </section>
+        )
     });
     return [
         <section key="buttons" className="form-row mb-2 d-flex justify-content-center">
