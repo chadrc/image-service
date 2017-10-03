@@ -29,19 +29,14 @@ const LocationNav = ({
                  }
              })}
          </nav>
-         <nav className="breadcrumb ml-2">
-             {hasUploadHash ? (
-                 <Link className="breadcrumb-item"
-                       to={location.pathname}>
-                     Back
-                 </Link>
-             ) : (
-                 <Link className="breadcrumb-item"
-                       to={location.pathname + "#upload"}>
-                     Upload
-                 </Link>
-             )}
-         </nav>
+         {!hasUploadHash ? (
+             <nav className="breadcrumb ml-2">
+                     <Link className="breadcrumb-item"
+                           to={location.pathname + "#upload"}>
+                         Upload
+                     </Link>
+             </nav>
+         ): ""}
      </section>
 ];
 
