@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import 'bootstrap-v4-dev/dist/css/bootstrap.css';
-import 'bootstrap-v4-dev/dist/js/bootstrap.js';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap';
 import * as $ from 'jquery';
 import './styles.css';
 import Globals from "./Globals";

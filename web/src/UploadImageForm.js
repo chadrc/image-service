@@ -1,8 +1,54 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {withRouter} from 'react-router';
-import {Field, reduxForm} from "redux-form";
+import {Field, FieldArray, reduxForm} from "redux-form";
 import FileInput from "./FileInput";
+
+const fileMembers = ({
+    currentDirectory,
+    fields
+}) => {
+    let fieldComps = fields.map((file, index) => (
+        <section className="form-row mb-2" key={`memberField-${index}`}>
+            <section className="col" key="image">
+                <Field name={`${file}.image`}
+                       component={FileInput} />
+            </section>
+            <section className="col" key="directory">
+                <Field name={`${file}.directory`}
+                       className="form-control"
+                       component="input"
+                       placeholder={currentDirectory}
+                       type="text" />
+            </section>
+            <section className="col" key="name">
+                <Field name={`${file}.name`}
+                       className="form-control"
+                       component="input"
+                       placeholder={file.name}
+                       type="text" />
+            </section>
+            <button type="button"
+                    className="btn btn-outline-danger"
+                    onClick={() => {
+                        if (fields.length > 1) {
+                            fields.remove(index);
+                        }
+                    }}>
+                &times;
+            </button>
+        </section>
+    ));
+    return [
+        <button type="button"
+                key="addButton"
+                className="btn btn-primary mb-2 mr-2"
+                onClick={() => fields.push({})}>
+            Add
+        </button>,
+        ...fieldComps
+    ]
+};
 
 const UploadImageForm = ({
                              currentDirectory,
@@ -10,30 +56,10 @@ const UploadImageForm = ({
                              uploadingImage,
                              handleSubmit
                          }) => (
-    <form className="form-inline" onSubmit={handleSubmit}>
-        <section className="form-group">
-            <label htmlFor="image">Image</label>
-            <Field name="image"
-                   className="form-control-file"
-                   component={FileInput} />
-        </section>
-        <section className="form-group">
-            <label htmlFor="directory">Directory</label>
-            <Field name="directory"
-                   className="form-control"
-                   component="input"
-                   placeholder={currentDirectory}
-                   type="text" />
-        </section>
-        <section className="form-group">
-            <label htmlFor="name">Name</label>
-            <Field name="name"
-                   className="form-control"
-                   component="input"
-                   placeholder={selectedImageName}
-                   type="text" />
-        </section>
-        <button type="submit" className="btn btn-primary">Upload</button>
+    <form onSubmit={handleSubmit}>
+            <FieldArray name="members"
+                        currentDirectory={currentDirectory}
+                        component={fileMembers} />
     </form>
 );
 
@@ -58,6 +84,11 @@ const mapDispatchToProps = (dispatch, {location}) => {
                 type: "UPLOAD_IMAGE",
                 values: values
             });
+        },
+        addImage: () => {
+            dispatch({
+                type: "ADD_IMAGE_TO_UPLOAD"
+            })
         }
     };
 };
