@@ -17,7 +17,16 @@
     z-index: 1;
 }
 
-.file-input-img {
+.file-input {
     max-height: 100px;
+    min-height: 75px;
     width: 100px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.file-input-img {
+    width: 100%;
 }
