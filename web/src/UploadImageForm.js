@@ -6,10 +6,12 @@ import FileInput from "./FileInput";
 
 const fileMembers = ({
     currentDirectory,
-    fields
+    fields,
+    reset
 }) => {
-    let fieldComps = fields.map((file, index) => (
-        <section className="form-row mb-2" key={`memberField-${index}`}>
+    let fieldComps = fields.map((file, index) => {
+        let fileData = fields.get(index);
+        return <section className="form-row mb-2" key={`memberField-${index}`}>
             <section className="col" key="image">
                 <Field name={`${file}.image`}
                        component={FileInput} />
@@ -25,7 +27,7 @@ const fileMembers = ({
                 <Field name={`${file}.name`}
                        className="form-control"
                        component="input"
-                       placeholder={file.name}
+                       placeholder={fileData.image ? fileData.image.name : null}
                        type="text" />
             </section>
             {fields.length > 1 ?
@@ -40,32 +42,38 @@ const fileMembers = ({
                 </button>
             : ""}
         </section>
-    ));
+    });
     return [
-        <button type="button"
-                key="addButton"
-                className="btn btn-primary btn-block mb-2 mr-2"
-                onClick={(event) => {
-                    let inputChild = event.target.children[0];
-                    if (inputChild) {
-                        inputChild.click();
-                    }
-                }}>
-            <input type="file"
-                   multiple
-                   style={{display: "none"}}
-                   onChange={(event) => {
-                       let files = event.target.files;
-                       if (files && files.length > 0) {
-                           for (let file of files) {
-                               fields.push({
-                                   image: file
-                               });
+        <section key="buttons" className="form-row mb-2 d-flex justify-content-center">
+            <button type="button"
+                    className="btn btn-outline-primary col-sm-3 mr-1"
+                    onClick={(event) => {
+                        let inputChild = event.target.children[0];
+                        if (inputChild) {
+                            inputChild.click();
+                        }
+                    }}>
+                <input type="file"
+                       multiple
+                       style={{display: "none"}}
+                       onChange={(event) => {
+                           let files = event.target.files;
+                           if (files && files.length > 0) {
+                               for (let file of files) {
+                                   fields.push({
+                                       image: file
+                                   });
+                               }
                            }
-                       }
-                   }}/>
-            Add
-        </button>,
+                       }}/>
+                Add
+            </button>
+            <button type="button"
+                    className="btn btn-outline-warning col-sm-3 ml-1"
+                    onClick={reset}>
+                Clear
+            </button>
+        </section>,
         ...fieldComps
     ]
 };
@@ -74,12 +82,14 @@ const UploadImageForm = ({
                              currentDirectory,
                              selectedImageName,
                              uploadingImage,
-                             handleSubmit
+                             handleSubmit,
+                             reset
                          }) => (
     <form onSubmit={handleSubmit}>
-            <FieldArray name="members"
-                        currentDirectory={currentDirectory}
-                        component={fileMembers} />
+        <FieldArray name="members"
+                    reset={reset}
+                    currentDirectory={currentDirectory}
+                    component={fileMembers} />
     </form>
 );
 
