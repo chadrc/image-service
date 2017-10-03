@@ -45,7 +45,25 @@ const fileMembers = ({
         <button type="button"
                 key="addButton"
                 className="btn btn-primary mb-2 mr-2"
-                onClick={() => fields.push({})}>
+                onClick={(event) => {
+                    let inputChild = event.target.children[0];
+                    if (inputChild) {
+                        inputChild.click();
+                    }
+                }}>
+            <input type="file"
+                   multiple
+                   style={{display: "none"}}
+                   onChange={(event) => {
+                       let files = event.target.files;
+                       if (files && files.length > 0) {
+                           for (let file of files) {
+                               fields.push({
+                                   image: file
+                               });
+                           }
+                       }
+                   }}/>
             Add
         </button>,
         ...fieldComps
@@ -91,11 +109,6 @@ const mapDispatchToProps = (dispatch, {location}) => {
                 type: "UPLOAD_IMAGE",
                 values: values
             });
-        },
-        addImage: () => {
-            dispatch({
-                type: "ADD_IMAGE_TO_UPLOAD"
-            })
         }
     };
 };
