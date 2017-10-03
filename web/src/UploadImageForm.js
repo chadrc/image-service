@@ -7,7 +7,8 @@ import FileInput from "./FileInput";
 const fileMembers = ({
     currentDirectory,
     fields,
-    reset
+    reset,
+    handleSubmit
 }) => {
     let fieldComps = fields.map((file, index) => {
         let fileData = fields.get(index);
@@ -69,9 +70,14 @@ const fileMembers = ({
                 Add
             </button>
             <button type="button"
-                    className="btn btn-outline-warning col-sm-3 ml-1"
+                    className="btn btn-outline-warning col-sm-3 ml-1 mr-1"
                     onClick={reset}>
                 Clear
+            </button>
+            <button type="button"
+                    className="btn btn-outline-success col-sm-3 ml-1"
+                    onClick={handleSubmit}>
+                Submit
             </button>
         </section>,
         ...fieldComps
@@ -88,6 +94,7 @@ const UploadImageForm = ({
     <form onSubmit={handleSubmit}>
         <FieldArray name="members"
                     reset={reset}
+                    handleSubmit={handleSubmit}
                     currentDirectory={currentDirectory}
                     component={fileMembers} />
     </form>
