@@ -16,19 +16,14 @@ const ImagesView = ({
                         onBackButtonClicked,
                         match,
                         location,
-                        breadCrumbs
+                        breadCrumbs,
+                        uploading
                     }) => (
     <section>
         <section className="d-flex justify-content-between">
             <LocationNav/>
             {dirInfo.directory ? (
                 <div>
-                    <button type="button"
-                            className="btn btn-primary mb-2 mr-2"
-                            data-toggle="collapse"
-                            data-target="#uploadImageCollapse">
-                        Upload Image
-                    </button>
                     <button type="button"
                             className="btn btn-primary mb-2"
                             data-toggle="collapse"
@@ -39,12 +34,12 @@ const ImagesView = ({
             ) : ""}
         </section>
 
-        {dirInfo.directory ? elary([
-                <section key="uploadImageCollapse" className="collapse mb-2" id="uploadImageCollapse">
+        {dirInfo.directory ?
+                (uploading ?
                     <UploadImageForm />
-                </section>,
-                <ImagesTable key="imagesTable" dirInfo={dirInfo} basePath={match.path}/>
-            ])
+                :
+                    <ImagesTable key="imagesTable" dirInfo={dirInfo} basePath={match.path}/>
+                )
             :
             <ImageEditView image={dirInfo}/>
         }
@@ -63,7 +58,11 @@ class ImagesViewContainer extends React.Component {
     }
 
     render() {
-        return <ImagesView {...this.props}/>
+        let uploading = false;
+        if (this.props.location.hash === "#upload") {
+            uploading = true;
+        }
+        return <ImagesView {...this.props} uploading={uploading}/>
     }
 }
 
