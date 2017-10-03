@@ -44,7 +44,7 @@ const fileMembers = ({
     return [
         <button type="button"
                 key="addButton"
-                className="btn btn-primary mb-2 mr-2"
+                className="btn btn-primary btn-block mb-2 mr-2"
                 onClick={(event) => {
                     let inputChild = event.target.children[0];
                     if (inputChild) {
