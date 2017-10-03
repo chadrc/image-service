@@ -28,15 +28,17 @@ const fileMembers = ({
                        placeholder={file.name}
                        type="text" />
             </section>
-            <button type="button"
-                    className="btn btn-outline-danger"
-                    onClick={() => {
-                        if (fields.length > 1) {
-                            fields.remove(index);
-                        }
-                    }}>
-                &times;
-            </button>
+            {fields.length > 1 ?
+                <button type="button"
+                        className="btn btn-outline-danger"
+                        onClick={() => {
+                            if (fields.length > 1) {
+                                fields.remove(index);
+                            }
+                        }}>
+                    &times;
+                </button>
+            : ""}
         </section>
     ));
     return [
@@ -70,7 +72,12 @@ const mapStateToProps = (state) => {
     return {
         uploading: state.imageService.uploadingImage,
         currentDirectory: state.router.location.pathname.replace("/images", ""),
-        selectedImageName: name
+        selectedImageName: name,
+        initialValues: {
+            members: [
+                {}
+            ]
+        }
     };
 };
 
