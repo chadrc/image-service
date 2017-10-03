@@ -1,25 +1,44 @@
 import React from 'react';
 
-const FileInput = ({className, input, imgRef, value, onChange}) => (
+const FileInput = ({
+                       className,
+                       input,
+                       imgRef,
+                       inputRef,
+                       value,
+                       pickImage,
+                       onChange
+}) => (
     <label className={`file-input${className ? " " + className : ""}`}>
         {value ? (
             <img className="file-input-img" ref={imgRef} />
         ) : (
-            <input name={input.name}
-                   onChange={(event) => {
-                       onChange(event);
-                   }}
-                   onBlur={input.onBlur}
-                   onFocus={input.onFocus}
-                   multiple={false}
-                   type="file"/>
+            <button type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => pickImage()}>
+                Pick
+            </button>
         )}
+        <input name={input.name}
+               ref={inputRef}
+               onChange={(event) => {
+                   onChange(event);
+               }}
+               onBlur={input.onBlur}
+               onFocus={input.onFocus}
+               multiple={false}
+               style={{display: "none"}}
+               type="file"/>
     </label>
 );
 
 class FileInputContainer extends React.Component {
     imgRef(img) {
         this.img = img;
+    }
+
+    inputRef(input) {
+        this.input = input;
     }
 
     onChange(event) {
@@ -29,6 +48,12 @@ class FileInputContainer extends React.Component {
             file = event.target.files[0];
         }
         this.props.input.onChange(file);
+    }
+
+    pickImage() {
+        if (this.input) {
+            this.input.click();
+        }
     }
 
     get value() {
@@ -45,6 +70,8 @@ class FileInputContainer extends React.Component {
             <FileInput {...this.props}
                        value={this.value}
                        onChange={(event) => this.onChange(event)}
+                       pickImage={() => this.pickImage()}
+                       inputRef={(input) => this.inputRef(input)}
                        imgRef={(img) => this.imgRef(img)}/>
         );
     }
@@ -61,9 +88,6 @@ class FileInputContainer extends React.Component {
             }, false);
             reader.readAsDataURL(this.value)
         }
-
-        console.log(this.props.input.name);
-        console.log(this.value);
     }
 }
 
