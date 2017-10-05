@@ -6,29 +6,29 @@ const LocationNav = ({
                          breadCrumbs,
                          location,
                          hasUploadHash
-                     }) => [
-         <nav className="breadcrumb">
-             {breadCrumbs.map((item, index) => {
-                 let last = index === breadCrumbs.length - 1;
-                 if (last && !hasUploadHash) {
-                     return (
-                         <a key={item.path}
-                            className="breadcrumb-item active">
-                             {item.name}
-                         </a>
-                     );
-                 } else {
-                     return (
-                         <Link className="breadcrumb-item"
-                               key={item.path}
-                               to={item.path}>
-                             {item.name}
-                         </Link>
-                     );
-                 }
-             })}
-         </nav>
-];
+                     }) => (
+    <nav className="breadcrumb">
+        {breadCrumbs.map((item, index) => {
+            let last = index === breadCrumbs.length - 1;
+            if (last && !hasUploadHash) {
+                return (
+                    <a key={item.path}
+                       className="breadcrumb-item active">
+                        {item.name}
+                    </a>
+                );
+            } else {
+                return (
+                    <Link className="breadcrumb-item"
+                          key={item.path}
+                          to={item.path}>
+                        {item.name}
+                    </Link>
+                );
+            }
+        })}
+    </nav>
+);
 
 class LocationNavContainer extends React.Component {
     render() {

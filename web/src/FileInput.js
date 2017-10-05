@@ -11,7 +11,7 @@ const FileInput = ({
 }) => (
     <label className={`file-input${className ? " " + className : ""}`}>
         {value ? (
-            <img className="file-input-img" ref={imgRef} />
+            <img alt="" className="file-input-img" ref={imgRef} />
         ) : (
             <button type="button"
                     className="btn btn-outline-secondary"
