@@ -123,13 +123,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, {location}) => {
     return {
-        onSubmit: (values) => {
-            if (!values.directory && values !== "") {
-                values.directory = location.pathname.replace("/images", "");
-            }
+        onSubmit: (value) => {
+            let images = value.members.map((image) => {
+                if (!image.directory && image !== "") {
+                    image.directory = location.pathname.replace("/images", "");
+                }
+                return image;
+            });
             dispatch({
-                type: "UPLOAD_IMAGE",
-                values: values
+                type: "UPLOAD_IMAGES",
+                images: images
             });
         }
     };
